@@ -1,5 +1,7 @@
 package com.hospital.booking.models;
 
+import com.hospital.booking.enums.Day;
+
 import java.time.LocalDate;
 
 public class Shift extends BaseModel {
@@ -7,19 +9,19 @@ public class Shift extends BaseModel {
     private Account doctor;
     private int slot;
     private int room;
-    private LocalDate date;
+    private Day day;
 
     public Shift() {
         super();
     }
 
-    public Shift(int id, Account doctor, int slot, int room, LocalDate date) {
+    public Shift(int id, Account doctor, int slot, int room, Day day) {
         super();
         this.id = id;
         this.doctor = doctor;
         this.slot = slot;
         this.room = room;
-        this.date = date;
+        this.day = day;
     }
 
     public int getId() {
@@ -54,12 +56,12 @@ public class Shift extends BaseModel {
         this.room = room;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Day getDay() {
+        return day;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDay(Day day) {
+        this.day = day;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class Shift extends BaseModel {
                 ", doctor=" + doctor +
                 ", slot=" + slot +
                 ", room=" + room +
-                ", date=" + date +
+                ", day=" + day.name() +
                 '}';
     }
 }

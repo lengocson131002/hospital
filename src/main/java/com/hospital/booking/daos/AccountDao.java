@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class AccountDao {
     private final String querySql = "select * from Account ";
 
-    List<Account> getAll(Role role) {
+    public List<Account> getAll(Role role) {
         String sql = querySql + " where ? is null or Role = ? ";
         DepartmentDao departmentDao = new DepartmentDao();
         List<Account> accounts = new ArrayList<>();
@@ -182,6 +182,7 @@ public class AccountDao {
 
         return account;
     }
+
 
     public boolean insertAccount(Account account) {
         String sql = "insert into Account (Avatar, FirstName, LastName, Gender, DOB, PhoneNumber, Email, Description, Role, Password, Address, DepartmentId, CreatedAt, UpdatedAt) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
