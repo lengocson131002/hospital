@@ -3,17 +3,18 @@ go
 
 create table dbo.Bill
 (
-    Id                 int identity
+    Id           int identity
         constraint Bill_pk
         primary key,
-    Price              bigint      not null,
-    Status             varchar(50) not null,
-    CreatedAt          datetime,
-    UpdatedAt          datetime,
-    CheckoutAt         datetime,
-    PatientName        nvarchar(255),
-    PatientEmail       nvarchar(255),
-    PatientPhoneNumber nvarchar(255)
+    Price        float       not null,
+    Status       varchar(50) not null,
+    CreatedAt    datetime,
+    UpdatedAt    datetime,
+    CheckoutAt   datetime,
+    PatientName  nvarchar(255),
+    PatientEmail nvarchar(255),
+    PatientPhone nvarchar(255),
+    Note         nvarchar(1000)
 )
     go
 
@@ -60,7 +61,6 @@ create table dbo.Shift
     DoctorId  int  not null
         constraint Shift_User_Id_fk
             references dbo.Account,
-    Room      int  not null,
     Slot      int  not null,
     CreatedAt datetime,
     UpdatedAt datetime,
@@ -79,7 +79,8 @@ create table dbo.Appointment
             references dbo.Account,
     ShiftId      int         not null
         constraint Appointment_Shift_Id_fk
-            references dbo.Shift,
+            references dbo.Shift
+            on delete cascade,
     PatientName  nvarchar(255),
     PatientPhone nvarchar(255),
     Status       varchar(50) not null,
@@ -110,4 +111,3 @@ create table dbo.Token
     Type      nvarchar(50) not null
 )
     go
-
