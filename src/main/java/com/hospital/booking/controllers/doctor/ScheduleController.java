@@ -85,8 +85,13 @@ public class ScheduleController extends HttpServlet {
             if (selected && existedShift == null) {
                 Shift shift = new Shift(account, date, slot);
                 shiftDao.insert(shift);
-            } else if (!selected && existedShift != null) {
+            } else if (!selected && existedShift != null && !existedShift.isBooked()) {
                 shiftDao.delete(existedShift.getId());
+            } else {
+                StatusResult result = new StatusResult(false);
+                String jsonResult = new Gson().toJson(result);
+                out.println(jsonResult);
+                return;
             }
 
             StatusResult result = new StatusResult(true);

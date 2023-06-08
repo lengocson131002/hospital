@@ -51,8 +51,7 @@ public class LoginGoogleController extends HttpServlet {
             HttpSession session = req.getSession();
             session.setAttribute(SessionConstants.ACCOUNT, account);
 
-            RequestDispatcher dis = req.getRequestDispatcher("index.jsp");
-            dis.forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/home");
         }
     }
 

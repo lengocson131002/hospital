@@ -162,8 +162,12 @@ public class AccountDao {
                 account.setDescription(resultSet.getString("Description"));
                 account.setToken(resultSet.getString("Token"));
                 account.setRole(Role.valueOf(resultSet.getString("Role")));
-                account.setCreatedAt(resultSet.getTimestamp("CreatedAt").toLocalDateTime());
-                account.setUpdatedAt(resultSet.getTimestamp("UpdatedAt").toLocalDateTime());
+                account.setCreatedAt(resultSet.getTimestamp("CreatedAt") != null
+                        ? resultSet.getTimestamp("CreatedAt").toLocalDateTime()
+                        : null);
+                account.setUpdatedAt(resultSet.getTimestamp("UpdatedAt") != null
+                        ? resultSet.getTimestamp("UpdatedAt").toLocalDateTime()
+                        : null);
 
                 return account;
             }

@@ -19,7 +19,16 @@ public class ShiftDao {
         List<Shift> shifts = new ArrayList<>();
         Connection connection = null;
         String sql =
-                "select s.Id, s.DoctorId, s.Date, s.Slot, s.CreatedAt, s.UpdatedAt, a.Id as AppointmentId, a.Status as AppointmentStatus, acc.Avatar as DoctorAvatar, acc.FirstName as DoctorFirstName, acc.LastName as DoctorLastName " +
+                "select s.Id, " +
+                        "s.DoctorId, " +
+                        "s.Date, " +
+                        "s.Slot, " +
+                        "s.CreatedAt, " +
+                        "s.UpdatedAt, " +
+                        "acc.Avatar as DoctorAvatar, " +
+                        "acc.FirstName as DoctorFirstName, " +
+                        "acc.LastName as DoctorLastName, " +
+                        "IIF(SUM(IIF(a.Status IS NULL or a.Status = 'CANCELED', 0, 1)) > 0, 0, 1) AS IsAvailable " +
                 "from Shift s " +
                 "left join Account acc on acc.Id = s.DoctorId " +
                 "left join Appointment a on s.Id = a.ShiftId " +
@@ -28,7 +37,18 @@ public class ShiftDao {
                         " and (? is null or s.Date <= ?)" +
                         " and (? is null or s.Slot = ?)" +
                         " and (? is null or s.DoctorId = ?) " +
-                        " and (? is null or (? = 0 and a.Id is not null and a.Status != 'Canceled' ) or (? = 1 and (a.Id is null or a.Status = 'Canceled')))";
+                "group by s.Id, " +
+                        "s.DoctorId, " +
+                        "s.Date, " +
+                        "s.Slot, " +
+                        "s.CreatedAt, " +
+                        "s.UpdatedAt, " +
+                        "acc.Avatar," +
+                        "acc.FirstName, " +
+                        "acc.LastName " +
+                "having ? is null " +
+                        "or (? = 0 and IIF(SUM(IIF(a.Status IS NULL or a.Status = 'CANCELED', 0, 1)) > 0, 0, 1) = 0) " +
+                        "or (? = 1 and IIF(SUM(IIF(a.Status IS NULL or a.Status = 'CANCELED', 0, 1)) > 0, 0, 1) = 1)";
 
         try {
             connection = DatabaseConnection.getInstance().getConnection();
@@ -101,9 +121,7 @@ public class ShiftDao {
                         ? resultSet.getTimestamp("UpdatedAt").toLocalDateTime()
                         : null);
 
-                boolean booked = resultSet.getInt("AppointmentId") != 0
-                        && !Objects.equals(AppointmentStatus.valueOf(resultSet.getString("AppointmentStatus")), AppointmentStatus.CANCELED);
-
+                boolean booked = resultSet.getInt("IsAvailable") == 0;
                 shift.setBooked(booked);
                 shifts.add(shift);
             }
@@ -213,5 +231,11 @@ public class ShiftDao {
             }
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        for(Shift shift : new ShiftDao().getAll(LocalDate.now().plusDays(1), true)) {
+            System.out.println(shift);
+        }
     }
 }

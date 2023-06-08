@@ -23,32 +23,37 @@
         <h3 class="mb-4">Profile</h3>
         <div class="col-5">
             <div class="mb-5">
-
-                <label for="formFile" class="form-label mb-3">Avatar:</label>
                 <c:if test="${account.avatar!=null}">
                     <img id="frame" src="${account.avatar}" class="img-fluid mb-3 d-block"
                          style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%"/>
                 </c:if>
                 <c:if test="${account.avatar==null}">
-                    <img id="frame" src="${pageContext.request.contextPath}/resources/images/person.jpg"
+                    <img  id="frame" src="${pageContext.request.contextPath}/resources/images/person.jpg"
                          class="img-fluid mb-3 d-block"
                          style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%"/>
                 </c:if>
 
-               <div class="row">
-                   <input  name="avatar" class="d-inline-block col-8 form-control" type="file" id="formFile" onchange="preview()"
-                          placeholder="Choose avatar">
-                   <div onclick="clearImage()" class="col-4 btn btn-primary mt-3">Clear</div>
-               </div>
+               <form method="post" action="${pageContext.request.contextPath}/upload-avatar" enctype="multipart/form-data">
+                   <div class="row d-flex justify-content-between align-items-center">
+                       <div class="col-8"><input name="avatar" class=" form-control"
+                                                 required
+                                                 type="file"
+                                                 onchange="preview()"
+                                                 placeholder="Choose avatar"></div>
+                       <button type="submit" class="col-4 btn btn-primary">Upload</button>
+                   </div>
+               </form>
             </div>
             <form method="post" action="change-password">
                 <div class="form-group required mb-3">
                     <label class="form-label" for="password">New password</label>
-                    <input value="${password}" name="password" type="password" id="password" class="form-control" required/>
+                    <input value="${password}" name="password" type="password" id="password" class="form-control"
+                           required/>
                 </div>
                 <div class="form-group required mb-3">
                     <label class="form-label" for="confirm-password">Confirm Password</label>
-                    <input value="${confirmPassword}" name="confirmPassword" type="password" id="confirm-password" class="form-control"
+                    <input value="${confirmPassword}" name="confirmPassword" type="password" id="confirm-password"
+                           class="form-control"
                            required/>
                 </div>
                 <button type="submit" class="btn btn-primary">Change password</button>
