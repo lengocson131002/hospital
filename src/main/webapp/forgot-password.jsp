@@ -21,7 +21,7 @@
                              class="img-fluid" alt="Sample image">
                     </div>
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <h3 class="mb-4">Forgot password</h3>
+                        <h3 class="mb-4">Quên mật khẩu</h3>
                         <form method="post" action="forgot-password">
                             <!-- Email input -->
                             <div class="form-group required mb-4">
@@ -31,7 +31,7 @@
 
                             <div class="text-center text-lg-start mt-4 pt-2">
                                 <button type="submit" class="btn btn-primary"
-                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Send request</button>
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Gửi yêu cầu</button>
                             </div>
 
                         </form>

@@ -76,14 +76,6 @@ public class ProfileController extends HttpServlet {
             currentAccount.setDepartment(department);
         }
 
-//        String email = req.getParameter("email");
-//        if (!Objects.equals(currentAccount.getEmail(), email) && accountDao.getAccountByEmail(email) != null) {
-//            req.setAttribute("error", "Email existed!");
-//            req.getRequestDispatcher("profile.jsp").forward(req, resp);
-//            return;
-//        }
-//        currentAccount.setEmail(email);
-
         if (accountDao.update(currentAccount)) {
             req.setAttribute("message", "Update profile successfully");
             //Update session

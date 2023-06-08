@@ -1,6 +1,5 @@
 package com.hospital.booking.models;
 
-import com.hospital.booking.enums.Day;
 
 import java.time.LocalDate;
 
@@ -8,20 +7,27 @@ public class Shift extends BaseModel {
     private int id;
     private Account doctor;
     private int slot;
-    private int room;
-    private Day day;
+
+    private LocalDate date;
+
+    private boolean booked;
+
+    private Slot slotInfo;
 
     public Shift() {
         super();
     }
 
-    public Shift(int id, Account doctor, int slot, int room, Day day) {
-        super();
-        this.id = id;
+    public Shift(int id, Account doctor, LocalDate date, int slot) {
         this.doctor = doctor;
         this.slot = slot;
-        this.room = room;
-        this.day = day;
+        this.date = date;
+    }
+
+    public Shift(Account doctor, LocalDate date, int slot) {
+        this.doctor = doctor;
+        this.slot = slot;
+        this.date = date;
     }
 
     public int getId() {
@@ -48,20 +54,28 @@ public class Shift extends BaseModel {
         this.slot = slot;
     }
 
-    public int getRoom() {
-        return room;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setRoom(int room) {
-        this.room = room;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public Day getDay() {
-        return day;
+    public boolean isBooked() {
+        return booked;
     }
 
-    public void setDay(Day day) {
-        this.day = day;
+    public void setBooked(boolean booked) {
+        this.booked = booked;
+    }
+
+    public Slot getSlotInfo() {
+        return slotInfo;
+    }
+
+    public void setSlotInfo(Slot slotInfo) {
+        this.slotInfo = slotInfo;
     }
 
     @Override
@@ -70,8 +84,8 @@ public class Shift extends BaseModel {
                 "id=" + id +
                 ", doctor=" + doctor +
                 ", slot=" + slot +
-                ", room=" + room +
-                ", day=" + day.name() +
+                ", day=" + date +
+                ", booked=" + booked +
                 '}';
     }
 }

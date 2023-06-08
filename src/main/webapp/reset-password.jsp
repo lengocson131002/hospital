@@ -21,19 +21,19 @@
                              class="img-fluid" alt="Sample image">
                     </div>
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <h3 class="mb-4">Reset password</h3>
+                        <h3 class="mb-4">Đặt lại mật khẩu</h3>
                         <form method="post" action="reset-password">
                             <input type="hidden"name="token" value="${token}"/>
                             <div class="form-group required mb-3">
-                                <label class="form-label" for="password">New password</label>
+                                <label class="form-label" for="password">Mật khẩu mới</label>
                                 <input value="${password}" name="password" type="password" id="password" class="form-control" required/>
                             </div>
                             <div class="form-group required mb-3">
-                                <label class="form-label" for="confirm-password">Confirm Password</label>
+                                <label class="form-label" for="confirm-password">Nhập lại mật khẩu mới</label>
                                 <input value="${confirmPassword}" name="confirmPassword" type="password" id="confirm-password" class="form-control"
                                        required/>
                             </div>
-                            <button type="submit" class="btn btn-primary">Change password</button>
+                            <button type="submit" class="btn btn-primary">Xác nhận</button>
                         </form>
                     </div>
                 </div>

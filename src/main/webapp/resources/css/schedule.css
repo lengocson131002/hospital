@@ -1,0 +1,32 @@
+.form-check {
+    display: inline-block;
+    width: 210px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+.form-check-input[type=checkbox] + label {
+    padding: 5px 10px;
+    border: 1px solid #343a40;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.form-check-input:checked[type=checkbox] + label {
+    background-color: #0d6efd;
+    color: white;
+}
+.form-check-input[type=checkbox] {
+    display: none;
+}
+
+.slot-status {
+    width: 25px;
+    height: 25px;
+    border-radius: 2px;
+    border: 1px solid #343a40;
+    margin-right: 5px;
+}

@@ -1,4 +1,4 @@
-package com.hospital.booking.controllers;
+package com.hospital.booking.controllers.admin;
 
 import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.enums.Gender;

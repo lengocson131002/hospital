@@ -42,7 +42,8 @@ public class LoginController extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.setAttribute(SessionConstants.ACCOUNT, account);
-        req.getRequestDispatcher("index.jsp").forward(req, resp);
+
+        resp.sendRedirect("home");
     }
 
     private String getLoginGgUrl() {

@@ -36,7 +36,7 @@ public class LoginGoogleController extends HttpServlet {
                 account.setRole(Role.PATIENT);
                 account.setGender(Gender.OTHER);
                 account.setEmail(googlePojo.getEmail());
-                account.setLastName(googlePojo.getFamily_name());
+                account.setLastName(googlePojo.getFamily_name() );
                 account.setFirstName(googlePojo.getFamily_name());
                 account.setAvatar(googlePojo.getPicture());
 

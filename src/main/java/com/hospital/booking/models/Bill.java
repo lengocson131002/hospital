@@ -1,5 +1,7 @@
 package com.hospital.booking.models;
 
+import com.hospital.booking.enums.BillStatus;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -10,9 +12,11 @@ public class Bill extends BaseModel {
     private String patientPhoneNumber;
     private String patientEmail;
     private LocalDateTime checkoutAt;
+    private BillStatus status;
+    private String note;
 
     public Bill() {
-        super();
+        status = BillStatus.CREATED;
     }
 
     public Bill(int id, double price, String patientName, String patientPhoneNumber, String patientEmail, LocalDateTime checkoutAt) {
@@ -73,6 +77,22 @@ public class Bill extends BaseModel {
         this.checkoutAt = checkoutAt;
     }
 
+    public BillStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BillStatus status) {
+        this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     @Override
     public String toString() {
         return "Bill{" +
@@ -82,6 +102,7 @@ public class Bill extends BaseModel {
                 ", patientPhoneNumber='" + patientPhoneNumber + '\'' +
                 ", patientEmail='" + patientEmail + '\'' +
                 ", checkoutAt=" + checkoutAt +
+                ", BillStatus=" + status +
                 '}';
     }
 }

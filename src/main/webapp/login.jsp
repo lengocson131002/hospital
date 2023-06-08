@@ -25,14 +25,15 @@
                              class="img-fluid" alt="Sample image">
                     </div>
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <h3 class="mb-4">Login</h3>
+                        <h3 class="mb-4">Đăng nhập</h3>
 
                         <form method="post" action="login">
                             <!-- Email input -->
                             <div class="form-group required mb-4">
                                 <label class="form-label" for="email">Email</label>
                                 <div class="input-group has-validation">
-                                    <input value="${email}" name="email" type="email" id="email" class="form-control" required/>
+                                    <input value="${email}" name="email" type="email" id="email" class="form-control"
+                                           required/>
                                     <div class="invalid-feedback">
                                         Email is required.
                                     </div>
@@ -41,7 +42,7 @@
 
                             <!-- Password input -->
                             <div class="form-group required mb-3">
-                                <label class="form-label" for="password">Password</label>
+                                <label class="form-label" for="password">Mật khẩu</label>
                                 <div class="input-group has-validation">
                                     <input value="${password}" name="password" type="password" id="password"
                                            class="form-control" required/>
@@ -57,33 +58,33 @@
                                     <input name="remember" class="form-check-input me-2" type="checkbox" value="y"
                                            id="remember"/>
                                     <label class="form-check-label" for="remember">
-                                        Remember me
+                                        Lưu đăng nhập
                                     </label>
                                 </div>
-                                <a href="forgot-password" class="text-body">Forgot password?</a>
+                                <a href="forgot-password" class="text-body">Quên mật khẩu?</a>
                             </div>
 
 
                             <div class="text-center text-lg-start mt-4 pt-2">
                                 <button type="submit" class="btn btn-primary"
-                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Login
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Đăng nhập
                                 </button>
-                                <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="register"
-                                                                                                  class="link-danger">Register</a>
+                                <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản? <a href="register"
+                                                                                                class="link-danger">Đăng ký</a>
                                 </p>
                             </div>
 
                             <div class="divider d-flex align-items-center justify-content-center my-4">
-                                <p class="text-center fw-bold mx-3 mb-0">Or</p>
+                                <p class="text-center fw-bold mx-3 mb-0">hoặc</p>
                             </div>
 
                             <div class="d-flex flex-row align-items-center justify-content-center">
-                                <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-                                <button type="button" class="btn btn-primary btn-floating mx-1">
-                                    <a class="text-light" href="${loginGgUrl}">
+                                <p class="lead fw-normal mb-0 me-3">Đăng nhập với google</p>
+                                <a class="text-light" href="${loginGgUrl}">
+                                    <button type="button" class="btn btn-primary btn-floating mx-1">
                                         <i class="fa-brands fa-google"></i>
-                                    </a>
-                                </button>
+                                    </button>
+                                </a>
                             </div>
                         </form>
                     </div>

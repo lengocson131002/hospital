@@ -10,7 +10,7 @@ public class Appointment extends BaseModel {
     private Account doctor;
     private Shift shift;
     private Bill bill;
-    private AppointmentStatus status;
+    private AppointmentStatus status = AppointmentStatus.CREATED;
     private String patientName;
     private String patientPhoneNumber;
     private String patientEmail;
@@ -148,10 +148,9 @@ public class Appointment extends BaseModel {
     public String toString() {
         return "Appointment{" +
                 "id=" + id +
-                ", booker=" + booker.getId() +
-                ", doctor=" + doctor.getId() +
-                ", shift=" + shift.getId() +
-                ", bill=" + bill.getId() +
+                ", booker=" + booker +
+                ", doctor=" + doctor +
+                ", shift=" + shift +
                 ", status=" + status +
                 ", patientName='" + patientName + '\'' +
                 ", patientPhoneNumber='" + patientPhoneNumber + '\'' +

@@ -18,7 +18,7 @@
 <body>
 <%--Header--%>
 <jsp:include page="./common/header.jsp"/>
-<div>
+<div class="container">
     <div class="col-md-10 col-lg-8 col-xl-8 offset-xl-1 mx-auto my-5 row gx-5">
         <h3 class="mb-4">Profile</h3>
         <div class="col-5">

@@ -50,8 +50,8 @@ public class ForgotPasswordController extends HttpServlet {
         boolean sendResult = EmailUtils.sendEmail(
                 ApplicationSettings.getGmailFrom(),
                 account.getEmail(),
-                "Forgot password",
-                "Click here to reset you password " + resetPasswordUrl);
+                "Quên mật khẩu",
+                String.format("Click vào đường dẫn sau để đặt lại mật khẩu: %s. Đường dẫn sẽ hết hạn sau %d phút", resetPasswordUrl, TOKEN_EXPIRE_IN_MINUTES));
 
         TokenDao tokenDao = new TokenDao();
         if (sendResult && tokenDao.setUserToken(token)) {
