@@ -1,6 +1,8 @@
 package com.hospital.booking.filters;
 
 import com.hospital.booking.constants.SessionConstants;
+import com.hospital.booking.daos.AccountDao;
+import com.hospital.booking.models.Account;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -23,6 +25,7 @@ public class AuthorizeFilter implements Filter {
         boolean loggedIn = session != null && session.getAttribute(SessionConstants.ACCOUNT) != null;
 
         List<String> whitelistUris = Arrays.asList(
+                request.getContextPath() + "",
                 request.getContextPath() + "/",
                 request.getContextPath() + "/home",
                 request.getContextPath() + "/login",
@@ -32,9 +35,22 @@ public class AuthorizeFilter implements Filter {
                 request.getContextPath() + "/reset-password"
         );
 
+        // Check status
+        if (loggedIn) {
+            AccountDao accountDao = new AccountDao();
+            Account account = (Account) session.getAttribute(SessionConstants.ACCOUNT);
+            account = accountDao.getAccountById(account.getId());
+
+            if (!account.isActive()) {
+                loggedIn = false;
+                session.removeAttribute(SessionConstants.ACCOUNT);
+            }
+        }
+
         if (loggedIn
                 || whitelistUris.contains(request.getRequestURI())
-                || request.getRequestURI().startsWith(request.getContextPath() + "/resources")) {
+                || request.getRequestURI().startsWith(request.getContextPath() + "/resources")
+                || request.getRequestURI().startsWith(request.getContextPath() + "/upload")) {
             filterChain.doFilter(request, response);
         } else {
             response.sendRedirect(request.getContextPath() + "/login");

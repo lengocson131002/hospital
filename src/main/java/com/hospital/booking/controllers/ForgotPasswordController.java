@@ -33,7 +33,7 @@ public class ForgotPasswordController extends HttpServlet {
         Account account = accountDao.getAccountByEmail(email);
         if (account == null) {
             req.setAttribute("email", email);
-            req.setAttribute("error", "Email not existed");
+            req.setAttribute("error", "Email không tồn tại");
             req.getRequestDispatcher("forgot-password.jsp").forward(req, resp);
             return;
         }

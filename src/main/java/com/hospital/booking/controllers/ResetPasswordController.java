@@ -7,6 +7,7 @@ import com.hospital.booking.daos.TokenDao;
 import com.hospital.booking.enums.TokenType;
 import com.hospital.booking.models.Account;
 import com.hospital.booking.models.Token;
+import com.hospital.booking.utils.BCryptUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +51,7 @@ public class ResetPasswordController extends HttpServlet {
         }
 
         AccountDao accountDao = new AccountDao();
-        if (!accountDao.updatePassword(token.getAccountId(), password)) {
+        if (!accountDao.updatePassword(token.getAccountId(), BCryptUtils.encryptPassword(password))) {
             req.setAttribute("password", password);
             req.setAttribute("confirmPassword", confirmPassword);
             req.setAttribute("error", "Reset password failed");

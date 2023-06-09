@@ -4,6 +4,7 @@ import com.hospital.booking.constants.SessionConstants;
 import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.daos.DepartmentDao;
 import com.hospital.booking.models.Account;
+import com.hospital.booking.utils.BCryptUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,8 +39,7 @@ public class ChangePasswordController extends HttpServlet {
         }
 
         AccountDao accountDao = new AccountDao();
-        account.setPassword(password);
-        if (!accountDao.updatePassword(account.getId(), password)) {
+        if (!accountDao.updatePassword(account.getId(), BCryptUtils.encryptPassword(password))) {
             req.setAttribute("password", password);
             req.setAttribute("confirmPassword", confirmPassword);
             req.setAttribute("error", "Change password failed");

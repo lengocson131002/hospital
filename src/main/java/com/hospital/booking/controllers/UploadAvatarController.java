@@ -39,7 +39,7 @@ public class UploadAvatarController extends HttpServlet {
 
                 HttpSession session = req.getSession();
                 Account account = (Account) session.getAttribute(SessionConstants.ACCOUNT);
-                String filePath = UPLOAD_DIRECTORY + File.separator + filename;
+                String filePath = req.getContextPath() + File.separator+ UPLOAD_DIRECTORY + File.separator + filename;
                 account.setAvatar(filePath);
 
                 AccountDao accountDao = new AccountDao();

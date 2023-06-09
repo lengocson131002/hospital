@@ -25,7 +25,7 @@ public class DatetimeUtils {
 
     public static String toString(LocalDate date, String format) {
         if (date == null) {
-            return null;
+            return "";
         }
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
@@ -51,7 +51,7 @@ public class DatetimeUtils {
 
     public static String toString(LocalDateTime date, String format) {
         if (date == null) {
-            return null;
+            return "";
         }
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);

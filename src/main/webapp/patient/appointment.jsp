@@ -114,6 +114,11 @@
                 </div>
 
                 <div class="form-group mb-3">
+                    <label class="form-label" for="doctor">Bác sĩ</label>
+                    <input disabled name="doctor" id="doctor" value="${appointment.doctor.lastName} ${appointment.doctor.firstName}" class="form-control"/>
+                </div>
+
+                <div class="form-group mb-3">
                     <label class="form-label" for="patientNote">Ghi chú</label>
                     <textarea name="note" id="patientNote" type="text"
                               class="form-control">${appointment.patientNote}</textarea>
@@ -130,6 +135,7 @@
                 <c:if test="${appointment.status=='CREATED'}">
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <button id="booking-button" type="submit" class="btn btn-primary me-2">Cập nhật</button>
+                        <a href="${pageContext.request.contextPath}/patient/appointments" class="btn-outline-danger btn d-inline-block me-2">Trở lại</a>
                         <a href="${pageContext.request.contextPath}/patient/cancel-appointment?id=${appointment.id}" class="btn btn-outline-danger">Hủy lịch hẹn</a>
                     </div>
                 </c:if>

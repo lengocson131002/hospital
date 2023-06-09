@@ -18,11 +18,13 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@WebServlet("/admin/add-staff")
-public class AddStaffController extends HttpServlet {
+@WebServlet("/admin/add-doctor")
+public class AddDoctorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/admin/add-staff.jsp").forward(req, resp);
+        DepartmentDao departmentDao = new DepartmentDao();
+        req.setAttribute("departments", departmentDao.getAll());
+        req.getRequestDispatcher("/admin/add-doctor.jsp").forward(req, resp);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class AddStaffController extends HttpServlet {
         account.setPhoneNumber(req.getParameter("phoneNumber"));
         account.setAddress(req.getParameter("address"));
         account.setDescription(req.getParameter("description"));
-        account.setRole(Role.STAFF);
+        account.setRole(Role.DOCTOR);
 
         String password = req.getParameter("password");
         account.setPassword(BCryptUtils.encryptPassword(password));
@@ -53,20 +55,34 @@ public class AddStaffController extends HttpServlet {
             error = "Email đã tồn tại";
         }
 
+        DepartmentDao departmentDao = new DepartmentDao();
+        String departmentIdParam = req.getParameter("departmentId");
+        if (StringUtils.isInteger(departmentIdParam)) {
+            int departmentId = Integer.parseInt(departmentIdParam);
+            Department department = departmentDao.getById(departmentId);
+            if (department == null) {
+                error = "Không tìm thấy phòng ban";
+            } else {
+                account.setDepartment(department);
+            }
+        }
+
         if (StringUtils.isEmpty(error) && !accountDao.insertAccount(account)) {
             error = "Có lỗi xảy ra. Vui lòng thử lại";
         }
 
         if (!StringUtils.isEmpty(error)) {
+            req.setAttribute("departments", departmentDao.getAll());
+
             req.setAttribute("error", error);
             req.setAttribute("password", password);
             req.setAttribute("confirmPassword", confirmPassword);
             req.setAttribute("acc", account);
-            req.getRequestDispatcher("/admin/add-staff.jsp").forward(req, resp);
+            req.getRequestDispatcher("/admin/add-doctor.jsp").forward(req, resp);
             return;
         }
 
-        req.setAttribute("message", "Tạo mới nhân viên thành công");
-        resp.sendRedirect(req.getContextPath() + "/admin/accounts?role=STAFF");
+        req.setAttribute("message", "Tạo mới bác sĩ thành công");
+        resp.sendRedirect(req.getContextPath() + "/admin/accounts?role=DOCTOR");
     }
 }

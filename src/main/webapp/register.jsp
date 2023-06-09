@@ -25,45 +25,50 @@
                     <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 mt-md-4">
                         <h3 class="mb-4">Đăng ký</h3>
 
-                        <p class="my-3 text-danger">${error}</p>
-
                         <form method="post" action="register">
                             <div class="row mb-3 gx-2">
                                 <div class="form-group required col-6">
-                                    <label for="firstName" class="form-label">Tên</label>
-                                    <input name="firstName" class="form-control" id="firstName" required value="${account.firstName}">
+                                    <label for="lastName" class="form-label">Họ</label>
+                                    <input name="lastName" class="form-control" id="lastName" required
+                                           value="${account.lastName}">
                                 </div>
                                 <div class="form-group required col-6">
-                                    <label for="lastName" class="form-label">Họ</label>
-                                    <input name="lastName" class="form-control" id="lastName" required value="${account.lastName}">
+                                    <label for="firstName" class="form-label">Tên</label>
+                                    <input name="firstName" class="form-control" id="firstName" required
+                                           value="${account.firstName}">
                                 </div>
+
                             </div>
 
                             <!-- Email input -->
                             <div class="form-group required mb-3">
                                 <label class="form-label" for="email">Email</label>
-                                <input name="email" type="email" id="email" class="form-control" required value="${account.email}" />
+                                <input name="email" type="email" id="email" class="form-control" required
+                                       value="${account.email}"/>
                             </div>
 
                             <div class="form-group required mb-3">
                                 <label class="form-label">Giới tính</label>
                                 <div class="d-flex">
                                     <div class="form-check me-4">
-                                        <input class="form-check-input" type="radio" name="gender" id="male" value="MALE" ${account.gender=='MALE'?'checked': ''}>
+                                        <input required class="form-check-input" type="radio" name="gender" id="male"
+                                               value="MALE" ${account.gender=='MALE'?'checked': ''}>
                                         <label class="form-check-label" for="male">
                                             Nam
                                         </label>
                                     </div>
 
                                     <div class="form-check me-5">
-                                        <input class="form-check-input" type="radio" name="gender" id="female" value="FEMALE" ${account.gender=='FEMALE'?'checked': ''}>
+                                        <input required class="form-check-input" type="radio" name="gender" id="female"
+                                               value="FEMALE" ${account.gender=='FEMALE'?'checked': ''}>
                                         <label class="form-check-label" for="female">
                                             Nữ
                                         </label>
                                     </div>
 
                                     <div class="form-check me-5">
-                                        <input class="form-check-input" type="radio" name="gender" id="other" value="OTHER" ${account.gender=='OTHER'?'checked': ''}>
+                                        <input required class="form-check-input" type="radio" name="gender" id="other"
+                                               value="OTHER" ${account.gender=='OTHER'?'checked': ''}>
                                         <label class="form-check-label" for="other">
                                             Khác
                                         </label>
@@ -74,8 +79,9 @@
 
 
                             <div class="form-group mb-3">
-                                <label class="form-label" for="phoneNumber" >Số điện thoại</label>
-                                <input name="phoneNumber" id="phoneNumber" value="${account.phoneNumber}" class="form-control"/>
+                                <label class="form-label" for="phoneNumber">Số điện thoại</label>
+                                <input name="phoneNumber" id="phoneNumber" value="${account.phoneNumber}"
+                                       class="form-control"/>
                             </div>
 
                             <div class="form-group mb-3">
@@ -91,18 +97,23 @@
                             <!-- Password input -->
                             <div class="form-group required mb-3">
                                 <label class="form-label" for="password">Mật khẩu</label>
-                                <input type="password" name="password" id="password" class="form-control" required value="${account.password}" />
+                                <input type="password" name="password" id="password" class="form-control" required
+                                       value="${password}"/>
                             </div>
 
                             <div class="form-group required mb-3">
                                 <label class="form-label" for="confirmPassword">Nhập lại mật khẩu</label>
-                                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"  value="${confirmPassword}" required/>
+                                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
+                                       value="${confirmPassword}" required/>
                             </div>
 
                             <div class="text-center text-lg-start mt-4 pt-2">
                                 <button type="submit" class="btn btn-primary"
-                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Đăng ký</button>
-                                <p class="small fw-bold mt-2 pt-1 mb-0">Bạn đã có tài khoản? <a href="login" class="link-danger">Đăng nhập</a></p>
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Đăng ký
+                                </button>
+                                <p class="small fw-bold mt-2 pt-1 mb-0">Bạn đã có tài khoản? <a href="login"
+                                                                                                class="link-danger">Đăng
+                                    nhập</a></p>
                             </div>
                         </form>
                     </div>

@@ -3,7 +3,6 @@ package com.hospital.booking.controllers.staff;
 import com.hospital.booking.daos.BillDao;
 import com.hospital.booking.models.Bill;
 import com.microsoft.sqlserver.jdbc.StringUtils;
-import sun.security.mscapi.CPublicKey;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/staff/bill")
 public class BillDetailController extends HttpServlet {

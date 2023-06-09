@@ -4,7 +4,7 @@
     <div id="navbar_top">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Medical</a>
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Medical</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -21,15 +21,11 @@
                             <c:when test="${sessionScope.account.role=='ADMIN'}">
                                 <li class="nav-item">
                                     <a class="nav-link" aria-current="page"
-                                       href="${pageContext.request.contextPath}/admin/doctors">Bác sĩ</a>
+                                       href="${pageContext.request.contextPath}/admin/accounts">Quản lý tài khoản</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" aria-current="page"
-                                       href="${pageContext.request.contextPath}/admin/staffs">Nhân viên</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page"
-                                       href="${pageContext.request.contextPath}/admin/patients">Bệnh nhân</a>
+                                       href="${pageContext.request.contextPath}/admin/reviews">Quản lý đánh giá</a>
                                 </li>
                             </c:when>
                             <c:when test="${sessionScope.account.role=='STAFF'}">
@@ -96,6 +92,7 @@
                             ${message}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    <c:remove var="message" scope="session" />
                 </div>
             </c:if>
 
@@ -105,6 +102,7 @@
                             ${error}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    <c:remove var="error" scope="session" />
                 </div>
             </c:if>
         </div>

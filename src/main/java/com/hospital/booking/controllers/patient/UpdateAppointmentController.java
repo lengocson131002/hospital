@@ -55,6 +55,7 @@ public class UpdateAppointmentController extends HttpServlet {
             Shift shift = shiftDao.getById(shiftId);
             if (shift != null) {
                 appointment.setShift(shift);
+                appointment.setDoctor(shift.getDoctor());
             }
         }
 

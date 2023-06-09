@@ -1,12 +1,3 @@
-<%@ page import="com.hospital.booking.utils.ApplicationCore" %>
-<%@ page import="com.hospital.booking.utils.ApplicationSettings" %>
-<%@ page import="com.hospital.booking.constants.GoogleConstants" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="com.hospital.booking.utils.DatetimeUtils" %>
-<%@ page import="com.hospital.booking.models.Shift" %>
-<%@ page import="com.hospital.booking.models.Slot" %>
-<%@ page import="com.hospital.booking.utils.SlotUtils" %>
-<%@ page import="com.hospital.booking.constants.DateTimeConstants" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -34,13 +25,13 @@
                     bệnh
                 </h4>
                 <div class="form-group required mb-3">
-                    <label class="form-label" for="name">Full Name</label>
+                    <label class="form-label" for="name">Họ và tên</label>
                     <input name="name" type="text" id="name" class="form-control" required
                            value="${name}"/>
                 </div>
 
                 <div class="form-group mb-3 required">
-                    <label class="form-label" for="phoneNumber">Phone Number</label>
+                    <label class="form-label" for="phoneNumber">Số điện thoại</label>
                     <input name="phoneNumber" id="phoneNumber" value="${phoneNumber}" class="form-control" required/>
                 </div>
 
@@ -66,7 +57,7 @@
                 %>
 
                 <div class="form-group mb-3">
-                    <label class="form-label" for="date">Date</label>
+                    <label class="form-label" for="date">Ngày khám</label>
                     <input name="date" id="date" min="<%= tomorrow %>" value="${date}" type="date" class="form-control"/>
                 </div>
 
@@ -77,6 +68,7 @@
 
                 <div class="text-center text-lg-start mt-4 pt-2">
                     <button id="booking-button" type="submit" class="btn btn-primary" disabled>Đặt lịch</button>
+                    <a href="${pageContext.request.contextPath}/patient/appointments" class="btn-outline-danger btn">Trở lại</a>
                 </div>
             </div>
             <div class="col-6">

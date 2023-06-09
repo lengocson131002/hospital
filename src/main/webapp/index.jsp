@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -6,6 +7,13 @@
     <title>Medical Website</title>
     <jsp:include page="common/import.jsp"/>
     <link rel="stylesheet" href="resources/css/header.css"/>
+    <script src="resources/js/common.js"></script>
+    <style>
+        .form-group.required .form-label:after {
+            content: "*";
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <%--Header--%>
@@ -13,7 +21,7 @@
 
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center">
-    <div class="container">
+    <div class="container" style="min-height: max-content">
         <h1>Welcome to Medilab</h1>
         <h5>Mỗi ngày bận rộn trôi qua, chúng ta lại vô tình lãng quên tài sản quý<br> giá nhất của mình: Sức khỏe. Hãy
             để Medilab trở thành một cánh<br> tay đắc lực chăm sóc và gìn giữ tài sản đó cho bạn và cả gia đình.</h5>
@@ -184,75 +192,39 @@
                 </div>
 
                 <div class="row">
-
-                    <div class="col-lg-6">
-                        <div class="member d-flex align-items-start">
-                            <div class="pic"><img src="${pageContext.request.contextPath}/resources/images/doctors/doctors-1.jpg" class="img-fluid" alt=""></div>
-                            <div class="member-info">
-                                <h4>Walter White</h4>
-                                <span>Chief Medical Officer</span>
-                                <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
-                                <div class="social">
-                                    <a href=""><i class="ri-twitter-fill"></i></a>
-                                    <a href=""><i class="ri-facebook-fill"></i></a>
-                                    <a href=""><i class="ri-instagram-fill"></i></a>
-                                    <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                    <c:forEach items="${doctors}" var="doctor">
+                        <div class="col-lg-6 mb-3">
+                            <div class="member d-flex align-items-start">
+                                <div class="pic" style="width: 120px; height: 120px;">
+                                    <c:if test="${doctor.avatar!=null}">
+                                        <img id="frame" src="${doctor.avatar}" class="img-fluid"/>
+                                    </c:if>
+                                    <c:if test="${doctor.avatar==null}">
+                                        <img id="frame"
+                                             src="${pageContext.request.contextPath}/resources/images/person.jpg"
+                                             class="img-fluid"/>
+                                    </c:if>
+                                </div>
+                                <div class="member-info">
+                                    <h4>${doctor.lastName} ${doctor.firstName}</h4>
+                                    <span>${doctor.department.name}</span>
+                                    <p>${doctor.description}</p>
+                                    <div class="social">
+                                        <c:if test="${doctor.phoneNumber != null}">
+                                            <a href="tel:${doctor.phoneNumber}">
+                                                <ion-icon name="call-outline"></ion-icon>
+                                            </a>
+                                        </c:if>
+                                        <c:if test="${doctor.email != null}">
+                                            <a href="mailto:${doctor.email}">
+                                                <ion-icon name="mail-outline"></ion-icon>
+                                            </a>
+                                        </c:if>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-lg-6 mt-4 mt-lg-0">
-                        <div class="member d-flex align-items-start">
-                            <div class="pic"><img src="${pageContext.request.contextPath}/resources/images/doctors/doctors-2.jpg" class="img-fluid" alt=""></div>
-                            <div class="member-info">
-                                <h4>Sarah Jhonson</h4>
-                                <span>Anesthesiologist</span>
-                                <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
-                                <div class="social">
-                                    <a href=""><i class="ri-twitter-fill"></i></a>
-                                    <a href=""><i class="ri-facebook-fill"></i></a>
-                                    <a href=""><i class="ri-instagram-fill"></i></a>
-                                    <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 mt-4">
-                        <div class="member d-flex align-items-start">
-                            <div class="pic"><img src="${pageContext.request.contextPath}/resources/images/doctors/doctors-3.jpg" class="img-fluid" alt=""></div>
-                            <div class="member-info">
-                                <h4>William Anderson</h4>
-                                <span>Cardiology</span>
-                                <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
-                                <div class="social">
-                                    <a href=""><i class="ri-twitter-fill"></i></a>
-                                    <a href=""><i class="ri-facebook-fill"></i></a>
-                                    <a href=""><i class="ri-instagram-fill"></i></a>
-                                    <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 mt-4">
-                        <div class="member d-flex align-items-start">
-                            <div class="pic"><img src="${pageContext.request.contextPath}/resources/images/doctors/doctors-4.jpg" class="img-fluid" alt=""></div>
-                            <div class="member-info">
-                                <h4>Amanda Jepson</h4>
-                                <span>Neurosurgeon</span>
-                                <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p>
-                                <div class="social">
-                                    <a href=""><i class="ri-twitter-fill"></i></a>
-                                    <a href=""><i class="ri-facebook-fill"></i></a>
-                                    <a href=""><i class="ri-instagram-fill"></i></a>
-                                    <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    </c:forEach>
                 </div>
 
             </div>
@@ -270,67 +242,90 @@
                 <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
                     <div class="swiper-wrapper">
 
-                        <div class="swiper-slide">
-                            <div class="testimonial-wrap">
-                                <div class="testimonial-item">
-                                    <img src="${pageContext.request.contextPath}/resources/images/f95fc16481403664909ffe5931524be5.jpg" class="testimonial-img"
-                                         alt="">
-                                    <h3>Nguyễn Kỳ Duyên</h3>
-                                    <h4>Ceo &amp; Founder</h4>
-                                    <p>
-                                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>Xin chào tất cả các nhân
-                                        viên đáng yêu, tôi không thể cảm ơn đủ tất cả vì sự kiên nhẫn và cách đối xử
-                                        chuyên nghiệp mà tôi nhận được từ tất cả các bạn. Tất cả
-                                        các bạn đã vượt lên trên và vượt ra ngoài nhiệm vụ chuyên môn của mình. Tôi đã
-                                        thấy sức khỏe của mình tốt hơn nhiều. Cảm ơn bạn một lần nữa, tôi sẽ giữ liên
-                                        lạc. Thương mến với những lời chúc tốt đẹp nhất.
-                                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                                    </p>
+                        <c:forEach items="${reviews}" var="review">
+                            <div class="swiper-slide">
+                                <div class="testimonial-wrap">
+                                    <div class="testimonial-item">
+                                        <c:if test="${review.reviewer.avatar!=null}">
+                                            <img id="frame" src="${review.reviewer.avatar}" class="testimonial-img"/>
+                                        </c:if>
+                                        <c:if test="${review.reviewer.avatar==null}">
+                                            <img id="frame"
+                                                 src="${pageContext.request.contextPath}/resources/images/person.jpg"
+                                                 class="testimonial-img"/>
+                                        </c:if>
+                                        <h3>${review.reviewer.lastName} ${review.reviewer.firstName} </h3>
+                                        <h4>
+                                            <p class="d-flex align-items-center">
+                                                <span class="d-block me-1">${review.score}</span>
+                                                <span class="d-block" style="color: #ffd43b"><ion-icon
+                                                        name="star"></ion-icon></span>
+                                            </p>
+                                        </h4>
+                                        <p>
+                                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                                            ${review.content}
+                                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-wrap">
-                                <div class="testimonial-item">
-                                    <img src="${pageContext.request.contextPath}/resources/images/043e5001a060c202b4c9b3574720cb87.jpg" class="testimonial-img"
-                                         alt="">
-                                    <h3>Sara Wilsson</h3>
-                                    <h4>Designer</h4>
-                                    <p>
-                                        <i class="bx bxs-quote-alt-left quote-icon-left"></i> Export tempor illum tamen
-                                        malis malis eram quae irure esse labore quem cillum quid cillum eram malis
-                                        quorum velit fore eram velit sunt aliqua noster fugiat irure
-                                        amet legam anim culpa.
-                                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-wrap">
-                                <div class="testimonial-item">
-                                    <img src="${pageContext.request.contextPath}/resources/images/f7e17565a2b75309bd9906959d53de41.jpg" class="testimonial-img"
-                                         alt="">
-                                    <h3>Jena Karlis</h3>
-                                    <h4>Store Owner</h4>
-                                    <p>
-                                        <i class="bx bxs-quote-alt-left quote-icon-left"></i> Enim nisi quem export duis
-                                        labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor
-                                        labore quem eram duis noster aute amet eram fore quis
-                                        sint minim.
-                                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End testimonial item -->
-
-
+                        </c:forEach>
                     </div>
+                    <!-- Button trigger modal -->
+                    <!-- Modal -->
+                    <c:if test="${account != null && account.role == 'PATIENT' && review == null}">
+                        <div class="d-flex justify-content-center my-5">
+                            <button type="button" class="btn btn-outline-primary mx-auto" data-bs-toggle="modal"
+                                    data-bs-target="#rateModal">
+                                Gửi đánh giá
+                            </button>
+                        </div>
+
+                        <div class="modal fade" id="rateModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form method="post" action="${pageContext.request.contextPath}/patient/rating-hospital">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Đánh giá chúng tôi</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3 d-flex align-items-center">
+                                                <label class="d-inline-block me-3 form-label" for="score">Điểm: </label>
+                                                <select class="form-control d-inline-block" id="score"
+                                                        class="form-select"
+                                                        name="score">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5" selected>5</option>
+                                                </select>
+                                                <span class="input-group-text d-inline-block h-100"
+                                                      style="color: #ffd43b">
+                                                    <ion-icon name="star"></ion-icon>
+                                                </span>
+                                            </div>
+                                            <div class="mb-4 form-group required">
+                                                <label for="content" class="form-label">Nội dung đánh giá:</label>
+                                                <textarea required class="form-control required" name="content"
+                                                          id="content"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Đánh giá</button>
+                                            <button type="button" class="btn btn-outline-danger"
+                                                    data-bs-dismiss="modal">Hủy
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </c:if>
                     <div class="swiper-pagination"></div>
                 </div>
 
@@ -339,7 +334,7 @@
         <!-- End Testimonials Section -->
         <!-- ======= Gallery Section ======= -->
         <section id="gallery" class="gallery">
-            <div class="container">
+            <div class="container" style="min-height: max-content">
 
                 <div class="section-title">
                     <h2>Hình Ảnh</h2>
@@ -353,64 +348,80 @@
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-1.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-1.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-1.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-1.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-2.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-2.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-2.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-2.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-3.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-3.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-3.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-3.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-4.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-4.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-4.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-4.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-5.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-5.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-5.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-5.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-6.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-6.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-6.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-6.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-7.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-7.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-7.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-7.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-8.jpg" class="galelry-lightbox">
-                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-8.jpg" alt="" class="img-fluid">
+                            <a href="${pageContext.request.contextPath}/resources/images/gallery/gallery-8.jpg"
+                               class="galelry-lightbox">
+                                <img src="${pageContext.request.contextPath}/resources/images/gallery/gallery-8.jpg"
+                                     alt="" class="img-fluid">
                             </a>
                         </div>
                     </div>

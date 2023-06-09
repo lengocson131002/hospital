@@ -21,8 +21,9 @@ public class Account extends BaseModel implements Cloneable{
     private Role role;
     private String address;
 
+    private boolean isActive;
     public Account() {
-        super();
+        isActive = true;
     }
 
     public Account(int id, String firstName, String lastName, Gender gender, String avatar, String phoneNumber, String email, Department department, LocalDate DOB, String description, String token, Role role) {
@@ -153,9 +154,17 @@ public class Account extends BaseModel implements Cloneable{
         this.token = token;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
+        return "Account{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -163,11 +172,14 @@ public class Account extends BaseModel implements Cloneable{
                 ", avatar='" + avatar + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", department=" + department +
                 ", DOB=" + DOB +
                 ", description='" + description + '\'' +
                 ", token='" + token + '\'' +
+                ", role=" + role +
+                ", address='" + address + '\'' +
+                ", isActive=" + isActive +
                 '}';
     }
-
 }

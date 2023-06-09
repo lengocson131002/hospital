@@ -4,6 +4,7 @@ import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.enums.Gender;
 import com.hospital.booking.enums.Role;
 import com.hospital.booking.models.Account;
+import com.hospital.booking.utils.BCryptUtils;
 import com.microsoft.sqlserver.jdbc.StringUtils;
 
 import javax.servlet.ServletException;
@@ -35,33 +36,35 @@ public class RegisterController extends HttpServlet {
         account.setGender(Gender.valueOf(req.getParameter("gender")));
         account.setPhoneNumber(req.getParameter("phoneNumber"));
         account.setAddress(req.getParameter("address"));
-        account.setPassword(req.getParameter("password"));
         account.setRole(Role.PATIENT);
+        String password = req.getParameter("password");
+        account.setPassword(BCryptUtils.encryptPassword(password));
         String confirmPassword = req.getParameter("confirmPassword");
 
         String error = null;
 
-        if (!Objects.equals(account.getPassword(), confirmPassword)) {
-            error = "Confirm password is not matched";
+        if (!Objects.equals(password, confirmPassword)) {
+            error = "Nhập lại mật khẩu không đúng";
         }
 
         if (accountDao.getAccountByEmail(account.getEmail()) != null) {
-            error = "Email existed";
+            error = "Email đã tồn tại";
         }
 
         if (StringUtils.isEmpty(error) && !accountDao.insertAccount(account)) {
-            error = "Some error occurred. Try again";
+            error = "Có lỗi xảy ra. Vui lòng thử lại";
         }
 
         if (!StringUtils.isEmpty(error)) {
             req.setAttribute("error", error);
+            req.setAttribute("password", password);
             req.setAttribute("confirmPassword", confirmPassword);
             req.setAttribute("account", account);
             req.getRequestDispatcher("register.jsp").forward(req, resp);
             return;
         }
 
-        req.setAttribute("message", "Register successfully");
+        req.setAttribute("message", "Đăng ký thành công");
         req.getRequestDispatcher("login.jsp").forward(req, resp);
     }
 }

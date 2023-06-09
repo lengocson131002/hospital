@@ -1,11 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: leson
-  Date: 6/1/2023
-  Time: 7:59 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -63,13 +56,13 @@
             <form method="post" action="profile" class="row">
                 <div class="row mb-3 gx-2">
                     <div class="form-group required col-6">
+                        <label for="lastName" class="form-label">Last name</label>
+                        <input name="lastName" class="form-control" id="lastName" required value="${account.lastName}">
+                    </div>
+                    <div class="form-group required col-6">
                         <label for="firstName" class="form-label">First name</label>
                         <input name="firstName" class="form-control" id="firstName" required
                                value="${account.firstName}">
-                    </div>
-                    <div class="form-group required col-6">
-                        <label for="lastName" class="form-label">Last name</label>
-                        <input name="lastName" class="form-control" id="lastName" required value="${account.lastName}">
                     </div>
                 </div>
 

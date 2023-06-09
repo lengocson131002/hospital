@@ -49,7 +49,26 @@ create table dbo.Account
     Role         varchar(50)  not null,
     Token        varchar(255),
     Password     varchar(255),
-    Address      nvarchar(500)
+    Address      nvarchar(500),
+    IsActive     bit
+)
+    go
+
+create table dbo.Review
+(
+    Id         int identity
+        constraint Review_pk
+        primary key,
+    Content    nvarchar(1000) not null,
+    Score      int            not null,
+    DoctorId   int
+        constraint Review_Account_Id_fk
+            references dbo.Account,
+    CreatedAt  datetime,
+    UpdatedAt  datetime,
+    ReviewerId int            not null
+        constraint Review_Account_Id_fk2
+            references dbo.Account
 )
     go
 
@@ -111,3 +130,4 @@ create table dbo.Token
     Type      nvarchar(50) not null
 )
     go
+
