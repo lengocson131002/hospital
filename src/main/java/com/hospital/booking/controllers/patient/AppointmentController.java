@@ -2,8 +2,10 @@ package com.hospital.booking.controllers.patient;
 
 import com.hospital.booking.constants.SessionConstants;
 import com.hospital.booking.daos.AppointmentDao;
+import com.hospital.booking.daos.ReviewDao;
 import com.hospital.booking.models.Account;
 import com.hospital.booking.models.Appointment;
+import com.hospital.booking.models.Review;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +21,7 @@ public class AppointmentController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         Account account = (Account) session.getAttribute(SessionConstants.ACCOUNT);
 
         AppointmentDao appointmentDao = new AppointmentDao();

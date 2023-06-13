@@ -22,6 +22,9 @@ public class Account extends BaseModel implements Cloneable{
     private String address;
 
     private boolean isActive;
+
+    private Float score;
+
     public Account() {
         isActive = true;
     }
@@ -162,6 +165,14 @@ public class Account extends BaseModel implements Cloneable{
         isActive = active;
     }
 
+    public Float getScore() {
+        return score;
+    }
+
+    public void setScore(Float score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -180,6 +191,7 @@ public class Account extends BaseModel implements Cloneable{
                 ", role=" + role +
                 ", address='" + address + '\'' +
                 ", isActive=" + isActive +
+                ", score=" + score +
                 '}';
     }
 }

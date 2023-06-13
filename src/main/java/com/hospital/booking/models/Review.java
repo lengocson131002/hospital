@@ -9,6 +9,8 @@ public class Review extends BaseModel {
     private Account doctor;
     private Account reviewer;
 
+    private Appointment appointment;
+
     public Review() {
     }
 
@@ -50,6 +52,14 @@ public class Review extends BaseModel {
 
     public void setReviewer(Account reviewer) {
         this.reviewer = reviewer;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
     }
 
     @Override

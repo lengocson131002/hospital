@@ -1,6 +1,7 @@
 package com.hospital.booking.daos;
 
 import com.hospital.booking.database.DatabaseConnection;
+import com.hospital.booking.database.ShiftQuery;
 import com.hospital.booking.enums.AppointmentStatus;
 import com.hospital.booking.models.*;
 
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 
 public class ShiftDao {
 
-    public List<Shift> getAll(Integer id, LocalDate from, LocalDate to,  Integer slot, Integer doctorId, Boolean isAvailable) {
+    public List<Shift> getAll(ShiftQuery query) {
         List<Shift> shifts = new ArrayList<>();
         Connection connection = null;
         String sql =
@@ -37,6 +38,7 @@ public class ShiftDao {
                         " and (? is null or s.Date <= ?)" +
                         " and (? is null or s.Slot = ?)" +
                         " and (? is null or s.DoctorId = ?) " +
+                        " and (? is null or (? = 1 and acc.IsActive = 1) or (? = 0 and acc.IsActive = 0)) " +
                 "group by s.Id, " +
                         "s.DoctorId, " +
                         "s.Date, " +
@@ -54,46 +56,52 @@ public class ShiftDao {
             connection = DatabaseConnection.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            if (id != null) {
-                statement.setInt(1, id);
-                statement.setInt(2, id);
+            if (query.getId() != null) {
+                statement.setInt(1, query.getId());
+                statement.setInt(2, query.getId());
             } else {
                 statement.setNull(1, Types.INTEGER);
                 statement.setNull(2, Types.INTEGER);
             }
 
-            Date sqlFrom = from != null ? Date.valueOf(from) : null;
+            Date sqlFrom = query.getFrom() != null ? Date.valueOf(query.getFrom()) : null;
             statement.setDate(3, sqlFrom);
             statement.setDate(4, sqlFrom);
 
-            Date sqlTo = to != null ? Date.valueOf(to) : null;
+            Date sqlTo = query.getTo() != null ? Date.valueOf(query.getTo()) : null;
             statement.setDate(5, sqlTo);
             statement.setDate(6, sqlTo);
 
-            if (slot != null) {
-                statement.setInt(7, slot);
-                statement.setInt(8, slot);
+            if (query.getSlot() != null) {
+                statement.setInt(7, query.getSlot());
+                statement.setInt(8, query.getSlot());
             } else  {
                 statement.setNull(7, Types.INTEGER);
                 statement.setNull(8, Types.INTEGER);
             }
 
-            if (doctorId != null) {
-                statement.setInt(9, doctorId);
-                statement.setInt(10, doctorId);
+            if (query.getDoctorId() != null) {
+                statement.setInt(9, query.getDoctorId());
+                statement.setInt(10, query.getDoctorId());
             } else  {
                 statement.setNull(9, Types.INTEGER);
                 statement.setNull(10, Types.INTEGER);
             }
 
-            if (isAvailable != null) {
-                statement.setBoolean(11, isAvailable);
-                statement.setBoolean(12, isAvailable);
-                statement.setBoolean(13, isAvailable);
+            if (query.getAvailable() != null) {
+                statement.setBoolean(11, query.getAvailable());
+                statement.setBoolean(12, query.getAvailable());
+                statement.setBoolean(13, query.getAvailable());
+                statement.setBoolean(14, query.getAvailable());
+                statement.setBoolean(15, query.getAvailable());
+                statement.setBoolean(16, query.getAvailable());
             } else {
                 statement.setNull(11, Types.BOOLEAN);
                 statement.setNull(12, Types.BOOLEAN);
                 statement.setNull(13, Types.BOOLEAN);
+                statement.setNull(14, Types.BOOLEAN);
+                statement.setNull(15, Types.BOOLEAN);
+                statement.setNull(16, Types.BOOLEAN);
             }
 
             ResultSet resultSet = statement.executeQuery();
@@ -142,7 +150,11 @@ public class ShiftDao {
     }
 
     public List<Shift> getAll(LocalDate date, Boolean isAvailable) {
-        return getAll(null, date, date, null, null, isAvailable);
+        ShiftQuery query = new ShiftQuery();
+        query.setFrom(date);
+        query.setTo(date);
+        query.setAvailable(isAvailable);
+        return getAll(query);
     }
 
     public List<Shift> getAll(LocalDate date) {
@@ -150,32 +162,58 @@ public class ShiftDao {
     }
 
     public List<Shift> getAll(int doctorId,  LocalDate from, LocalDate to, Boolean isAvailable) {
-        return getAll(null, from, to, null, doctorId, isAvailable);
+        ShiftQuery query = new ShiftQuery();
+        query.setDoctorId(doctorId);
+        query.setFrom(from);
+        query.setTo(to);
+        query.setAvailable(isAvailable);
+        return getAll(query);
     }
 
     public List<Shift> getAll(int doctorId,  LocalDate from, LocalDate to) {
-        return getAll(doctorId, from, to, null);
+        ShiftQuery query = new ShiftQuery();
+        query.setDoctorId(doctorId);
+        query.setFrom(from);
+        query.setTo(to);
+        return getAll(query);
     }
 
     public List<Shift> getAll(int doctorId,  LocalDate date, Boolean isAvailable) {
-        return getAll(null, date, date, null, doctorId, isAvailable);
+        ShiftQuery query = new ShiftQuery();
+        query.setDoctorId(doctorId);
+        query.setFrom(date);
+        query.setTo(date);
+        query.setAvailable(isAvailable);
+        return getAll(query);
     }
 
     public List<Shift> getAll(int doctorId,  LocalDate date) {
-        return getAll(null, date, date, null, doctorId, null);
+        ShiftQuery query = new ShiftQuery();
+        query.setDoctorId(doctorId);
+        query.setFrom(date);
+        query.setTo(date);
+        return getAll(query);
     }
 
     public List<Shift> getAll() {
-        return getAll(null, null, null, null, null, null);
+        ShiftQuery query = new ShiftQuery();
+        return getAll(query);
     }
 
     public Shift getById(int id) {
-        List<Shift> shifts = getAll(id, null, null, null, null, null);
+        ShiftQuery query = new ShiftQuery();
+        query.setId(id);
+        List<Shift> shifts = getAll(query);
         return !shifts.isEmpty() ? shifts.get(0) : null;
     }
 
     public Shift get(int doctorId, LocalDate date, int slot) {
-        List<Shift> shifts = getAll(null, date, date, slot, doctorId, null);
+        ShiftQuery query = new ShiftQuery();
+        query.setDoctorId(doctorId);
+        query.setFrom(date);
+        query.setTo(date);
+        query.setSlot(slot);
+        List<Shift> shifts = getAll(query);
         return !shifts.isEmpty() ? shifts.get(0) : null;
     }
 

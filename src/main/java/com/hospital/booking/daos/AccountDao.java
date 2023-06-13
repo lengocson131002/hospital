@@ -18,6 +18,15 @@ import java.util.logging.Logger;
 public class AccountDao {
     private final String querySql = "select a.* from Account a";
 
+    public static void main(String[] args) {
+        AccountDao dao = new AccountDao();
+        List<Account> tops = dao.getTopDoctors(5);
+        System.out.println("Size: "+ tops.size());
+        for (Account acc : tops) {
+            System.out.println(acc);
+        }
+    }
+
     public List<Account> getAll(AccountQuery query) {
         String sql = "select a.*, d.Id as DepartmentId, d.Name as DepartmentName, d.Description as DepartmentDescription " +
                 "from Account a " +
@@ -144,7 +153,6 @@ public class AccountDao {
                 ? accounts.get(0)
                 : null;
     }
-
 
     public boolean insertAccount(Account account) {
         String sql = "insert into Account (Avatar, FirstName, LastName, Gender, DOB, PhoneNumber, Email, Description, Role, Password, Address, DepartmentId, CreatedAt, UpdatedAt, IsActive) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -273,9 +281,77 @@ public class AccountDao {
     }
 
     public List<Account> getTopDoctors(int top) {
-        List<Account> doctors = getAll(Role.DOCTOR);
-        return doctors.size() > top
-                ? doctors.subList(0, top)
-                : doctors;
+        String sql = "select Top(?) " +
+                "   a.Id, " +
+                "   a.Avatar, " +
+                "   a.FirstName, " +
+                "   a.LastName, " +
+                "   a.Email, " +
+                "   a.PhoneNumber, " +
+                "   a.Gender, " +
+                "   d.Id as DepartmentId, " +
+                "   d.Name as DepartmentName, " +
+                "   d.Description as DepartmentDescription, " +
+                "   AVG(Cast(r.Score as Float)) as Score " +
+                "from Account a " +
+                "   left join Department d on d.Id = a.DepartmentId " +
+                "   inner join Review r on r.DoctorId = a.Id " +
+                "group by a.Id, " +
+                "   a.Avatar, " +
+                "   a.FirstName, " +
+                "   a.LastName, " +
+                "   a.Email, " +
+                "   a.PhoneNumber, " +
+                "   a.Gender, " +
+                "   d.Id," +
+                "   d.Name, " +
+                "   d.Description " +
+                "order by Score desc ";
+        List<Account> accounts = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, top);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Account account = new Account();
+                account.setId(resultSet.getInt("Id"));
+                account.setAvatar(resultSet.getString("Avatar"));
+                account.setFirstName(resultSet.getString("FirstName"));
+                account.setLastName(resultSet.getString("LastName"));
+                account.setGender(resultSet.getString("Gender") != null
+                        ? Gender.valueOf(resultSet.getString("Gender"))
+                        : null);
+                account.setPhoneNumber(resultSet.getString("PhoneNumber"));
+                account.setEmail(resultSet.getString("Email"));
+
+
+                int departmentId = resultSet.getInt("DepartmentId");
+                if (departmentId != 0) {
+                    Department department = new Department();
+                    department.setId(departmentId);
+                    department.setName(resultSet.getString("DepartmentName"));
+                    department.setDescription(resultSet.getString("DepartmentDescription"));
+
+                    account.setDepartment(department);
+                }
+                account.setScore(resultSet.getFloat("Score"));
+                accounts.add(account);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Department.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return accounts;
     }
 }

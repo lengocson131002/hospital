@@ -54,24 +54,6 @@ create table dbo.Account
 )
     go
 
-create table dbo.Review
-(
-    Id         int identity
-        constraint Review_pk
-        primary key,
-    Content    nvarchar(1000) not null,
-    Score      int            not null,
-    DoctorId   int
-        constraint Review_Account_Id_fk
-            references dbo.Account,
-    CreatedAt  datetime,
-    UpdatedAt  datetime,
-    ReviewerId int            not null
-        constraint Review_Account_Id_fk2
-            references dbo.Account
-)
-    go
-
 create table dbo.Shift
 (
     Id        int identity
@@ -89,7 +71,9 @@ create table dbo.Shift
 
 create table dbo.Appointment
 (
-    Id           int identity,
+    Id           int identity
+        constraint Appointment_pk
+        primary key,
     BookerId     int         not null
         constraint Booking_User_Id_booker
             references dbo.Account,
@@ -113,6 +97,27 @@ create table dbo.Appointment
     BillId       int
         constraint Appointment_Bill_Id_fk
             references dbo.Bill
+)
+    go
+
+create table dbo.Review
+(
+    Id            int identity
+        constraint Review_pk
+        primary key,
+    Content       nvarchar(1000) not null,
+    Score         int            not null,
+    DoctorId      int
+        constraint Review_Account_Id_fk
+            references dbo.Account,
+    CreatedAt     datetime,
+    UpdatedAt     datetime,
+    ReviewerId    int            not null
+        constraint Review_Account_Id_fk2
+            references dbo.Account,
+    AppointmentId int
+        constraint Review_Appointment_Id_fk
+            references dbo.Appointment
 )
     go
 

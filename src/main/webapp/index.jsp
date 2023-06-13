@@ -206,7 +206,14 @@
                                     </c:if>
                                 </div>
                                 <div class="member-info">
-                                    <h4>${doctor.lastName} ${doctor.firstName}</h4>
+                                    <h4 class="d-inline-block me-2">${doctor.lastName} ${doctor.firstName}</h4>
+                                    <div class="text-center d-flex align-items-center">
+                                        <p class="d-inline-block me-1">${doctor.score}</p>
+                                        <p class="d-inline-block" style="color: #ffd43b">
+                                            <ion-icon
+                                                    name="star"></ion-icon>
+                                        </p>
+                                    </div>
                                     <span>${doctor.department.name}</span>
                                     <p>${doctor.description}</p>
                                     <div class="social">
@@ -264,7 +271,7 @@
                                         </h4>
                                         <p>
                                             <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                            ${review.content}
+                                                ${review.content}
                                             <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                                         </p>
                                     </div>

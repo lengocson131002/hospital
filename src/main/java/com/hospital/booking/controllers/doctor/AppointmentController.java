@@ -19,7 +19,7 @@ public class AppointmentController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         Account account = (Account) session.getAttribute(SessionConstants.ACCOUNT);
 
         AppointmentDao appointmentDao = new AppointmentDao();

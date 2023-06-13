@@ -1,6 +1,8 @@
 package com.hospital.booking.controllers.admin;
 
+import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.daos.ReviewDao;
+import com.hospital.booking.models.Account;
 import com.hospital.booking.models.Review;
 
 import javax.servlet.ServletException;
@@ -18,7 +20,12 @@ public class ReviewController extends HttpServlet {
         ReviewDao reviewDao = new ReviewDao();
         List<Review> reviews = reviewDao.getHospitalReviews();
 
+        AccountDao accountDao = new AccountDao();
+        List<Account> topDoctors = accountDao.getTopDoctors(5);
+
         req.setAttribute("reviews", reviews);
+        req.setAttribute("topDoctors", topDoctors);
+
         req.getRequestDispatcher("/admin/reviews.jsp").forward(req, resp);
     }
 }

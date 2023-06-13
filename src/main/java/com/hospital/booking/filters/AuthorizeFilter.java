@@ -20,7 +20,7 @@ public class AuthorizeFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
 
         boolean loggedIn = session != null && session.getAttribute(SessionConstants.ACCOUNT) != null;
 

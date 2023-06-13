@@ -5,6 +5,7 @@ public class ReviewQuery {
     private Integer doctorId;
     private Integer reviewerId;
     private Boolean reviewDoctor;
+    private Integer appointmentId;
 
     public ReviewQuery() {
     }
@@ -39,6 +40,14 @@ public class ReviewQuery {
 
     public void setReviewDoctor(Boolean reviewDoctor) {
         this.reviewDoctor = reviewDoctor;
+    }
+
+    public Integer getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Integer appointmentId) {
+        this.appointmentId = appointmentId;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.hospital.booking.database.AccountQuery;
 import com.hospital.booking.database.DatabaseConnection;
 import com.hospital.booking.database.ReviewQuery;
 import com.hospital.booking.models.Account;
+import com.hospital.booking.models.Appointment;
 import com.hospital.booking.models.Department;
 import com.hospital.booking.models.Review;
 
@@ -31,14 +32,17 @@ public class ReviewDao {
                         "r.LastName as ReviewerLastName, " +
                         "r.FirstName as ReviewerFirstName, " +
                         "r.Avatar as ReviewerAvatar, " +
-                        "r.Email as ReviewerEmail " +
+                        "r.Email as ReviewerEmail, " +
+                        "ap.Id as AppointmentId " +
                         "from Review re " +
                         "   left join Account d on d.Id = re.DoctorId " +
                         "   left join Account r on r.Id = re.ReviewerId " +
+                        "   left join Appointment ap on ap.Id = re.AppointmentId " +
                         "   where (? is null or re.Id = ?) " +
                         "   and (? is null or re.DoctorId = ?) " +
                         "   and (? is null or re.ReviewerId = ?) " +
                         "   and (? is null or (? = 1 and re.DoctorId is not null) or (? = 0 and re.DoctorId is null)) " +
+                        "   and (? is null or ap.Id = ?) " +
                         "order by re.CreatedAt desc ";
         List<Review> reviews = new ArrayList<>();
         Connection connection = null;
@@ -80,6 +84,14 @@ public class ReviewDao {
                 statement.setNull(9, Types.BOOLEAN);
             }
 
+            if (query.getAppointmentId() != null) {
+                statement.setInt(10, query.getAppointmentId());
+                statement.setInt(11, query.getAppointmentId());
+
+            } else {
+                statement.setNull(10, Types.INTEGER);
+                statement.setNull(11, Types.INTEGER);
+            }
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -105,6 +117,13 @@ public class ReviewDao {
                     doctor.setEmail(resultSet.getString("DoctorEmail"));
 
                     review.setDoctor(doctor);
+                }
+
+                int apId = resultSet.getInt("AppointmentId");
+                if (apId > 0) {
+                    Appointment appointment = new Appointment();
+                    appointment.setId(apId);
+                    review.setAppointment(appointment);
                 }
 
                 // reviewer
@@ -139,8 +158,8 @@ public class ReviewDao {
     }
 
     public boolean insert(Review review) {
-        String sql = "insert into Review (Content, Score, DoctorId, ReviewerId, CreatedAt, UpdatedAt)" +
-                "values (?,?,?,?,?,?);";
+        String sql = "insert into Review (Content, Score, DoctorId, ReviewerId, AppointmentId, CreatedAt, UpdatedAt)" +
+                "values (?,?,?,?,?,?,?);";
         Connection connection = null;
         try {
             connection = DatabaseConnection.getInstance().getConnection();
@@ -159,8 +178,14 @@ public class ReviewDao {
                 statement.setNull(4, Types.INTEGER);
             }
 
-            statement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+            if (review.getAppointment() != null) {
+                statement.setInt(5, review.getAppointment().getId());
+            } else {
+                statement.setNull(5, Types.INTEGER);
+            }
+
             statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
 
             if (statement.executeUpdate() > 0) {
                 return true;
@@ -265,5 +290,22 @@ public class ReviewDao {
         ReviewQuery reviewQuery = new ReviewQuery();
         reviewQuery.setReviewDoctor(false);
         return getAll(reviewQuery);
+    }
+
+    public Review getReview(int reviewerId, int doctorId) {
+        ReviewQuery reviewQuery = new ReviewQuery();
+        reviewQuery.setDoctorId(doctorId);
+        reviewQuery.setReviewerId(reviewerId);
+        List<Review> reviews = getAll(reviewQuery);
+
+        return !reviews.isEmpty() ? reviews.get(0) : null;
+    }
+
+    public Review getAppointmentReview(int apId) {
+        ReviewQuery reviewQuery = new ReviewQuery();
+        reviewQuery.setAppointmentId(apId);
+        List<Review> reviews = getAll(reviewQuery);
+
+        return !reviews.isEmpty() ? reviews.get(0) : null;
     }
 }

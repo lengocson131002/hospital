@@ -26,8 +26,101 @@
 <%--Header--%>
 <jsp:include page="../common/header.jsp"/>
 <div class="container pb-5">
-    <h2 class="my-5">Thông tin lịch hẹn khám bệnh</h2>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="my-5">Thông tin lịch hẹn khám bệnh</h2>
+        <c:if test="${review != null}">
+            <button id="rating-button" class="btn btn-primary me-2" data-bs-toggle="modal"
+                    data-bs-target="#reviewModal">Đã đánh giá
+            </button>
+            <div class="modal fade" id="reviewModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" >Đánh giá bác sĩ</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3 d-flex align-items-center">
+                                    <label class="d-inline-block me-3 form-label">Điểm: </label>
+                                    <select class="form-control d-inline-block" class="form-select" name="score" disabled>
+                                        <option value="1" ${review.score == 1 ? 'selected' : 0}>1</option>
+                                        <option value="2" ${review.score == 2 ? 'selected' : 0}>2</option>
+                                        <option value="3" ${review.score == 3 ? 'selected' : 0}>3</option>
+                                        <option value="4" ${review.score == 4 ? 'selected' : 0}>4</option>
+                                        <option value="5" ${review.score == 5 ? 'selected' : 0}>5</option>
+                                    </select>
+                                    <span class="input-group-text d-inline-block h-100"
+                                          style="color: #ffd43b">
+                                                    <ion-icon name="star"></ion-icon>
+                                                </span>
+                                </div>
+                                <div class="mb-4 form-group required">
+                                    <label class="form-label">Nội dung đánh giá:</label>
+                                    <textarea required class="form-control required" readonly>${review.content}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="${appointment.status=='COMPLETED' && review == null}">
+            <button id="rating-button" class="btn btn-primary me-2" data-bs-toggle="modal"
+                    data-bs-target="#rateModal">Đánh giá bác sĩ
+            </button>
+            <div class="modal fade" id="rateModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form method="post"
+                          action="${pageContext.request.contextPath}/patient/rating-doctor">
+                        <input type="hidden" name="appointmentId" value="${appointment.id}"/>
+                        <input type="hidden" name="doctorId" value="${appointment.doctor.id}"/>
 
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Đánh giá bác sĩ</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3 d-flex align-items-center">
+                                    <label class="d-inline-block me-3 form-label"
+                                           for="score">Điểm: </label>
+                                    <select class="form-control d-inline-block" id="score"
+                                            class="form-select"
+                                            name="score">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5" selected>5</option>
+                                    </select>
+                                    <span class="input-group-text d-inline-block h-100"
+                                          style="color: #ffd43b">
+                                                    <ion-icon name="star"></ion-icon>
+                                                </span>
+                                </div>
+                                <div class="mb-4 form-group required">
+                                    <label for="content" class="form-label">Nội dung đánh giá:</label>
+                                    <textarea required class="form-control required" name="content"
+                                              id="content"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Đánh giá</button>
+                                <button type="button" class="btn btn-outline-danger"
+                                        data-bs-dismiss="modal">Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </c:if>
+    </div>
     <p class="my-3">
         Trạng thái:
         <c:if test="${appointment.status=='CREATED'}">
@@ -109,13 +202,15 @@
 
                     <div class="form-group mb-3 col-6">
                         <label class="form-label" for="time">Thời gian</label>
-                        <input name="time" id="time" value="${slot.startTime} - ${slot.endTime}" disabled class="form-control"/>
+                        <input name="time" id="time" value="${slot.startTime} - ${slot.endTime}" disabled
+                               class="form-control"/>
                     </div>
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="form-label" for="doctor">Bác sĩ</label>
-                    <input disabled name="doctor" id="doctor" value="${appointment.doctor.lastName} ${appointment.doctor.firstName}" class="form-control"/>
+                    <input disabled name="doctor" id="doctor"
+                           value="${appointment.doctor.lastName} ${appointment.doctor.firstName}" class="form-control"/>
                 </div>
 
                 <div class="form-group mb-3">
@@ -126,19 +221,22 @@
 
                 <c:if test="${not empty appointment.doctorNote}">
                     <div class="form-group mb-3">
-                        <label class="form-label" for="doctorNote" >Ghi chú của bác sĩ</label>
+                        <label class="form-label" for="doctorNote">Ghi chú của bác sĩ</label>
                         <textarea name="doctorNote" id="doctorNote" disabled type="text"
                                   class="form-control">${appointment.doctorNote}</textarea>
                     </div>
                 </c:if>
 
-                <c:if test="${appointment.status=='CREATED'}">
+                <div>
                     <div class="text-center text-lg-start mt-4 pt-2">
-                        <button id="booking-button" type="submit" class="btn btn-primary me-2">Cập nhật</button>
-                        <a href="${pageContext.request.contextPath}/patient/appointments" class="btn-outline-danger btn d-inline-block me-2">Trở lại</a>
-                        <a href="${pageContext.request.contextPath}/patient/cancel-appointment?id=${appointment.id}" class="btn btn-outline-danger">Hủy lịch hẹn</a>
+                        <c:if test="${appointment.status=='CREATED'}">
+                            <button id="booking-button" type="submit" class="btn btn-primary me-2">Cập nhật</button>
+                        </c:if>
+                        <a href="${pageContext.request.contextPath}/patient/appointments"
+                           class="btn-outline-danger btn d-inline-block me-2">Trở lại</a>
                     </div>
-                </c:if>
+                </div>
+
             </div>
             <div class="col-6">
                 <h4 class="mb-5">

@@ -10,7 +10,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý tài khoản</title>
+    <title>Quản lý đánh giá</title>
     <jsp:include page="../common/import.jsp"/>
     <link href="../resources/css/common.css" rel="stylesheet">
     <script src="../resources/js/common.js"></script>
@@ -18,12 +18,12 @@
 <body>
 <%--Header--%>
 <jsp:include page="../common/header.jsp"/>
-<div class="container pb-5">
+<div class="container my-5">
     <div class="row">
-        <div class="col-8">
-            <div class="my-5 ">
+        <div class="col-7">
+            <div class="my-5">
                 <div>
-                    <h3>Đánh giá bệnh viện từ bệnh nhân</h3>
+                    <h3>Đánh giá bệnh viện từ bệnh nhân (${reviews.size()})</h3>
                 </div>
             </div>
             <div>
@@ -44,15 +44,17 @@
                             <div class="col-md-9">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <a class="text-decoration-none" href="${pageContext.request.contextPath}/admin/patient?id=${review.reviewer.id}">${review.reviewer.lastName} ${review.reviewer.firstName}</a>
+                                        <a class="text-decoration-none"
+                                           href="${pageContext.request.contextPath}/admin/patient?id=${review.reviewer.id}">${review.reviewer.lastName} ${review.reviewer.firstName}</a>
                                     </h5>
                                     <p class="card-text d-flex align-items-center">
                                         <span class="d-block me-1">${review.score}</span>
-                                        <span class="d-block" style="color: #ffd43b"><ion-icon name="star"></ion-icon></span>
+                                        <span class="d-block" style="color: #ffd43b"><ion-icon
+                                                name="star"></ion-icon></span>
                                     </p>
                                     <p class="card-text">${review.content}</p>
                                     <p class="card-text"><small class="text-muted">
-                                        <%= DatetimeUtils.toString(((Review)pageContext.getAttribute("review")).getCreatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %>
+                                        <%= DatetimeUtils.toString(((Review) pageContext.getAttribute("review")).getCreatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %>
                                     </small></p>
                                 </div>
                             </div>
@@ -61,10 +63,54 @@
                 </c:forEach>
             </div>
         </div>
-        <div class="col-4">
-            <div class="my-5 ">
-                <div>
+        <div class="col-5">
+            <div class="px-3">
+                <div class="my-5">
                     <h3>Top 5 bác sĩ</h3>
+                </div>
+                <div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${topDoctors}" var="doctor" varStatus="loop">
+                            <tr>
+                                <th>${loop.index + 1}</th>
+                                <td>
+                                    <c:if test="${doctor.avatar!=null}">
+                                        <img id="frame" src="${doctor.avatar}" class="img-fluid mb-3 d-block"
+                                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"/>
+                                    </c:if>
+                                    <c:if test="${doctor.avatar==null}">
+                                        <img id="frame"
+                                             src="${pageContext.request.contextPath}/resources/images/person.jpg"
+                                             class="img-fluid mb-3 d-block"
+                                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"/>
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <a class="text-decoration-none" href="${pageContext.request.contextPath}/admin/doctor?id=${doctor.id}">
+                                            ${doctor.lastName} ${doctor.firstName}
+                                    </a>
+                                </td>
+                                <td>
+                                        ${doctor.department.name}
+                                </td>
+                                <td class="text-center">
+                                    <span class="d-inline-block me-1"><%= String.format("%,.1f", ((Account) pageContext.getAttribute("doctor")).getScore()) %></span>
+                                    <span class="d-inline-block" style="color: #ffd43b"><ion-icon name="star"></ion-icon></span>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
