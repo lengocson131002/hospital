@@ -301,7 +301,7 @@ public class AccountDao {
                 "from Account a " +
                 "   left join Department d on d.Id = a.DepartmentId " +
                 "   left join Review r on r.DoctorId = a.Id " +
-                "where ? is null or ? = 0 or (? = 1 and r.id is not null) " +
+                "where a.Role = 'DOCTOR' and (? is null or ? = 0 or (? = 1 and r.id is not null)) " +
                 "group by a.Id, " +
                 "   a.Avatar, " +
                 "   a.FirstName, " +
