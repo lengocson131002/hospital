@@ -25,7 +25,7 @@ public class HomeController extends HttpServlet {
 
         // top doctor
         AccountDao accountDao = new AccountDao();
-        List<Account> doctors = accountDao.getTopDoctors(4);
+        List<Account> doctors = accountDao.getTopDoctors(4, false);
         req.setAttribute("doctors", doctors);
 
         req.getRequestDispatcher( "index.jsp").forward(req, resp);

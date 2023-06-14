@@ -1,3 +1,4 @@
+<%@ page import="com.hospital.booking.models.Account" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -197,10 +198,12 @@
                             <div class="member d-flex align-items-start">
                                 <div class="pic" style="width: 120px; height: 120px;">
                                     <c:if test="${doctor.avatar!=null}">
-                                        <img id="frame" src="${doctor.avatar}" class="img-fluid"/>
+                                        <img style="object-fit: cover; height: 100%;" id="frame" src="${doctor.avatar}"
+                                             class="img-fluid"/>
                                     </c:if>
                                     <c:if test="${doctor.avatar==null}">
                                         <img id="frame"
+
                                              src="${pageContext.request.contextPath}/resources/images/person.jpg"
                                              class="img-fluid"/>
                                     </c:if>
@@ -208,7 +211,8 @@
                                 <div class="member-info">
                                     <h4 class="d-inline-block me-2">${doctor.lastName} ${doctor.firstName}</h4>
                                     <div class="text-center d-flex align-items-center">
-                                        <p class="d-inline-block me-1">${doctor.score}</p>
+                                        <p class="d-inline-block me-1"><%= String.format("%,.1f", ((Account) pageContext.getAttribute("doctor")).getScore()) %>
+                                        </p>
                                         <p class="d-inline-block" style="color: #ffd43b">
                                             <ion-icon
                                                     name="star"></ion-icon>

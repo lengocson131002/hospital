@@ -7,6 +7,7 @@ import com.hospital.booking.enums.Role;
 import com.hospital.booking.models.Account;
 import com.hospital.booking.models.Department;
 import com.microsoft.sqlserver.jdbc.StringUtils;
+import sun.management.counter.AbstractCounter;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class AccountDao {
 
     public static void main(String[] args) {
         AccountDao dao = new AccountDao();
-        List<Account> tops = dao.getTopDoctors(5);
+        List<Account> tops = dao.getTopDoctors(5, true);
         System.out.println("Size: "+ tops.size());
         for (Account acc : tops) {
             System.out.println(acc);
@@ -281,6 +282,10 @@ public class AccountDao {
     }
 
     public List<Account> getTopDoctors(int top) {
+        return getTopDoctors(top, true);
+    }
+
+    public List<Account> getTopDoctors(int top,Boolean byReview) {
         String sql = "select Top(?) " +
                 "   a.Id, " +
                 "   a.Avatar, " +
@@ -295,7 +300,8 @@ public class AccountDao {
                 "   AVG(Cast(r.Score as Float)) as Score " +
                 "from Account a " +
                 "   left join Department d on d.Id = a.DepartmentId " +
-                "   inner join Review r on r.DoctorId = a.Id " +
+                "   left join Review r on r.DoctorId = a.Id " +
+                "where ? is null or ? = 0 or (? = 1 and r.id is not null) " +
                 "group by a.Id, " +
                 "   a.Avatar, " +
                 "   a.FirstName, " +
@@ -313,6 +319,16 @@ public class AccountDao {
             connection = DatabaseConnection.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, top);
+            if (byReview != null) {
+                statement.setBoolean(2, byReview);
+                statement.setBoolean(3, byReview);
+                statement.setBoolean(4, byReview);
+            } else {
+                statement.setNull(2, Types.BOOLEAN);
+                statement.setNull(3, Types.BOOLEAN);
+                statement.setNull(4, Types.BOOLEAN);
+            }
+
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Account account = new Account();
@@ -354,4 +370,5 @@ public class AccountDao {
 
         return accounts;
     }
+
 }

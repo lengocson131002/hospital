@@ -28,7 +28,7 @@
 <div class="container pb-5">
     <div class="d-flex justify-content-between align-items-center">
         <h2 class="my-5">Thông tin lịch hẹn khám bệnh</h2>
-        <c:if test="${review != null}">
+        <c:if test="${appointmentReview != null}">
             <button id="rating-button" class="btn btn-primary me-2" data-bs-toggle="modal"
                     data-bs-target="#reviewModal">Đã đánh giá
             </button>
@@ -46,11 +46,11 @@
                                 <div class="input-group mb-3 d-flex align-items-center">
                                     <label class="d-inline-block me-3 form-label">Điểm: </label>
                                     <select class="form-control d-inline-block" class="form-select" name="score" disabled>
-                                        <option value="1" ${review.score == 1 ? 'selected' : 0}>1</option>
-                                        <option value="2" ${review.score == 2 ? 'selected' : 0}>2</option>
-                                        <option value="3" ${review.score == 3 ? 'selected' : 0}>3</option>
-                                        <option value="4" ${review.score == 4 ? 'selected' : 0}>4</option>
-                                        <option value="5" ${review.score == 5 ? 'selected' : 0}>5</option>
+                                        <option value="1" ${appointmentReview.score == 1 ? 'selected' : 0}>1</option>
+                                        <option value="2" ${appointmentReview.score == 2 ? 'selected' : 0}>2</option>
+                                        <option value="3" ${appointmentReview.score == 3 ? 'selected' : 0}>3</option>
+                                        <option value="4" ${appointmentReview.score == 4 ? 'selected' : 0}>4</option>
+                                        <option value="5" ${appointmentReview.score == 5 ? 'selected' : 0}>5</option>
                                     </select>
                                     <span class="input-group-text d-inline-block h-100"
                                           style="color: #ffd43b">
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="mb-4 form-group required">
                                     <label class="form-label">Nội dung đánh giá:</label>
-                                    <textarea required class="form-control required" readonly>${review.content}</textarea>
+                                    <textarea required class="form-control required" readonly>${appointmentReview.content}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </c:if>
-        <c:if test="${appointment.status=='COMPLETED' && review == null}">
+        <c:if test="${appointment.status=='COMPLETED' && appointmentReview == null}">
             <button id="rating-button" class="btn btn-primary me-2" data-bs-toggle="modal"
                     data-bs-target="#rateModal">Đánh giá bác sĩ
             </button>
@@ -231,6 +231,7 @@
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <c:if test="${appointment.status=='CREATED'}">
                             <button id="booking-button" type="submit" class="btn btn-primary me-2">Cập nhật</button>
+                            <a href="${pageContext.request.contextPath}/patient/cancel-appointment?id=${appointment.id}" id="cancel-button" class="btn btn-outline-danger me-2">Hủy lịch hẹn</a>
                         </c:if>
                         <a href="${pageContext.request.contextPath}/patient/appointments"
                            class="btn-outline-danger btn d-inline-block me-2">Trở lại</a>

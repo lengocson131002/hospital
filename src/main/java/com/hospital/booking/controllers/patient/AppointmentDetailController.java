@@ -31,7 +31,7 @@ public class AppointmentDetailController extends HttpServlet {
         ReviewDao reviewDao = new ReviewDao();
         Review review = reviewDao.getAppointmentReview(appointment.getId());
         if (review != null) {
-            req.setAttribute("review", review);
+            req.setAttribute("appointmentReview", review);
         }
 
         req.setAttribute("appointment", appointment);

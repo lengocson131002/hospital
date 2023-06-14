@@ -1,11 +1,15 @@
 package com.hospital.booking.controllers.doctor;
 
 import com.hospital.booking.constants.AppointmentConstants;
+import com.hospital.booking.constants.DateTimeConstants;
 import com.hospital.booking.daos.AppointmentDao;
 import com.hospital.booking.enums.AppointmentStatus;
 import com.hospital.booking.models.Appointment;
 import com.hospital.booking.models.Shift;
 import com.hospital.booking.models.Slot;
+import com.hospital.booking.utils.ApplicationSettings;
+import com.hospital.booking.utils.DatetimeUtils;
+import com.hospital.booking.utils.EmailUtils;
 import com.hospital.booking.utils.SlotUtils;
 
 import javax.servlet.ServletException;
@@ -43,7 +47,7 @@ public class CancelAppointmentController extends HttpServlet {
         long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), startTime);
         System.out.println(minutes);
 
-        if (minutes <= AppointmentConstants.BLOCK_APPOINTMENT_BEFORE) {
+        if (startTime.isAfter(LocalDateTime.now()) && minutes <= AppointmentConstants.BLOCK_APPOINTMENT_BEFORE) {
             req.setAttribute("error", String.format("Huỷ lịch hẹn thất bại. Bạn chỉ có thể hủy trước %d phút khi cuộc hẹn diễn ra.",AppointmentConstants.BLOCK_APPOINTMENT_BEFORE));
             req.setAttribute("appointment", appointment);
             req.getRequestDispatcher("/doctor/appointment.jsp").forward(req, resp);
@@ -54,12 +58,23 @@ public class CancelAppointmentController extends HttpServlet {
         appointment.setStatus(AppointmentStatus.CANCELED);
         if (!appointmentDao.update(appointment)) {
             req.setAttribute("error", "Huỷ lịch hẹn thất bại. Vui lòng thử lại!");
-            req.setAttribute("appointment", appointment);
-            req.getRequestDispatcher("/doctor/appointment.jsp").forward(req, resp);
-            return;
+        } else {
+            // Send email
+             EmailUtils.sendEmail(
+                    ApplicationSettings.getGmailFrom(),
+                    appointment.getBooker().getEmail(),
+                    "[MEDICAL] Hủy lịch hẹn khám bệnh",
+                    String.format("Cuộc hẹn khám bệnh của bạn vào: %s %s-%s với bác sĩ %s đã bị hủy. Xin lỗi vì sự bất tiện này.",
+                            DatetimeUtils.toString(appointment.getShift().getDate(), DateTimeConstants.DATE_FORMAT),
+                            slot.getStartTime(),
+                            slot.getEndTime(),
+                            appointment.getDoctor().getLastName() + " " + appointment.getDoctor().getLastName()));
+
+            req.setAttribute("message", "Hủy lịch hẹn thành công. Đã gửi thông báo đến bệnh nhân.");
         }
 
-        resp.sendRedirect(req.getContextPath() + "/doctor/appointments");
+        req.setAttribute("appointment", appointment);
+        req.getRequestDispatcher("/doctor/appointment.jsp").forward(req, resp);
     }
 
 }

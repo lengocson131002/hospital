@@ -308,4 +308,10 @@ public class ReviewDao {
 
         return !reviews.isEmpty() ? reviews.get(0) : null;
     }
+
+    public static void main(String[] args) {
+        ReviewDao reviewDao = new ReviewDao();
+        Review review = reviewDao.getAppointmentReview(26);
+        System.out.println(review);
+    }
 }

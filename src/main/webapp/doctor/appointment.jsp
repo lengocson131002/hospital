@@ -110,6 +110,7 @@
                 <div class="text-center text-lg-start mt-4 pt-2">
                     <c:if test="${appointment.status=='CREATED'}">
                         <button id="booking-button" type="submit" class="btn btn-primary me-2">Hoàn thành</button>
+                        <a href="${pageContext.request.contextPath}/doctor/cancel-appointment?id=${appointment.id}" id="cancel-button" class="btn btn-outline-danger me-2">Hủy lịch hẹn</a>
                     </c:if>
                     <a href="${pageContext.request.contextPath}/doctor/appointments" class="btn btn-outline-danger">Trở
                         lại danh sách</a>
