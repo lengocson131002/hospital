@@ -37,6 +37,7 @@ public class AccountDao {
                 "   and (? is null or IsActive = ?) " +
                 "   and (? is null or a.Id = ?) " +
                 "   and (? is null or FirstName like ? or LastName like ? or PhoneNumber like ? or Email like ?) " +
+                "   and (? is null or a.DepartmentId = ?)" +
                 "order by a.CreatedAt desc ";
         List<Account> accounts = new ArrayList<>();
         Connection connection = null;
@@ -76,6 +77,14 @@ public class AccountDao {
             statement.setString(11, q);
             statement.setString(12, q);
             statement.setString(13, q);
+
+            if (query.getDepartmentId() != null) {
+                statement.setInt(14, query.getDepartmentId());
+                statement.setInt(15, query.getDepartmentId());
+            } else {
+                statement.setNull(14, Types.INTEGER);
+                statement.setNull(15, Types.INTEGER);
+            }
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -285,7 +294,7 @@ public class AccountDao {
         return getTopDoctors(top, true);
     }
 
-    public List<Account> getTopDoctors(int top,Boolean byReview) {
+    public List<Account> getTopDoctors(int top,Boolean byAppointmentCount) {
         String sql = "select Top(?) " +
                 "   a.Id, " +
                 "   a.Avatar, " +
@@ -297,11 +306,11 @@ public class AccountDao {
                 "   d.Id as DepartmentId, " +
                 "   d.Name as DepartmentName, " +
                 "   d.Description as DepartmentDescription, " +
-                "   AVG(Cast(r.Score as Float)) as Score " +
+                "   COUNT(ap.id) as AppointmentCount " +
                 "from Account a " +
                 "   left join Department d on d.Id = a.DepartmentId " +
-                "   left join Review r on r.DoctorId = a.Id " +
-                "where a.Role = 'DOCTOR' and (? is null or ? = 0 or (? = 1 and r.id is not null)) " +
+                "   left join Appointment ap on ap.DoctorId = a.Id " +
+                "where a.Role = 'DOCTOR' and (? is null or ? = 0 or (? = 1 and ap.id is not null and ap.status = 'COMPLETED')) " +
                 "group by a.Id, " +
                 "   a.Avatar, " +
                 "   a.FirstName, " +
@@ -312,17 +321,17 @@ public class AccountDao {
                 "   d.Id," +
                 "   d.Name, " +
                 "   d.Description " +
-                "order by Score desc ";
+                "order by AppointmentCount desc ";
         List<Account> accounts = new ArrayList<>();
         Connection connection = null;
         try {
             connection = DatabaseConnection.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, top);
-            if (byReview != null) {
-                statement.setBoolean(2, byReview);
-                statement.setBoolean(3, byReview);
-                statement.setBoolean(4, byReview);
+            if (byAppointmentCount != null) {
+                statement.setBoolean(2, byAppointmentCount);
+                statement.setBoolean(3, byAppointmentCount);
+                statement.setBoolean(4, byAppointmentCount);
             } else {
                 statement.setNull(2, Types.BOOLEAN);
                 statement.setNull(3, Types.BOOLEAN);
@@ -352,7 +361,7 @@ public class AccountDao {
 
                     account.setDepartment(department);
                 }
-                account.setScore(resultSet.getFloat("Score"));
+                account.setAppointmentCount(resultSet.getInt("AppointmentCount"));
                 accounts.add(account);
             }
 

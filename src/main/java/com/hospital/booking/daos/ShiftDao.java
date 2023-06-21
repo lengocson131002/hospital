@@ -105,7 +105,6 @@ public class ShiftDao {
             }
 
             ResultSet resultSet = statement.executeQuery();
-            AccountDao accountDao = new AccountDao();
             while (resultSet.next()) {
                 Shift shift = new Shift();
                 shift.setId(resultSet.getInt("Id"));

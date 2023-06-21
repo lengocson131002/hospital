@@ -6,6 +6,7 @@ import java.util.Date;
 public abstract class BaseModel {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 
     public BaseModel() {
         this.createdAt = LocalDateTime.now();

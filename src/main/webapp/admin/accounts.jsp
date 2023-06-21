@@ -1,14 +1,6 @@
-<%@ page import="com.hospital.booking.utils.ApplicationCore" %>
-<%@ page import="com.hospital.booking.utils.ApplicationSettings" %>
-<%@ page import="com.hospital.booking.constants.GoogleConstants" %>
-<%@ page import="java.time.LocalDate" %>
 <%@ page import="com.hospital.booking.utils.DatetimeUtils" %>
-<%@ page import="com.hospital.booking.models.Shift" %>
-<%@ page import="com.hospital.booking.models.Slot" %>
-<%@ page import="com.hospital.booking.utils.SlotUtils" %>
 <%@ page import="com.hospital.booking.constants.DateTimeConstants" %>
 <%@ page import="com.hospital.booking.models.Account" %>
-<%@ page import="com.hospital.booking.models.Appointment" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -31,21 +23,40 @@
             <h2>Quản lý tài khoản</h2>
         </div>
     </div>
-    <div class="mb-5 d-flex justify-content-between align-items-center">
-        <form class="d-flex align-items-center justify-content-between" method="get" action="${pageContext.request.contextPath}/admin/accounts">
-            <select class="d-inline-block form-select me-2" name="role" aria-label="Lọc theo role">
+    <div class="mb-5 gy-2 d-flex flex-md-row flex-column justify-content-between align-items-start g-2">
+        <form class="d-flex align-items-center justify-content-between me-auto mb-md-0 mb-3" method="get"
+              action="${pageContext.request.contextPath}/admin/accounts">
+            <select class="d-inline-block form-select me-2" name="role" aria-label="Lọc theo role" id="role-filter">
                 <option value="DOCTOR" ${role=='DOCTOR' ? 'selected' : ''}>Bác sĩ</option>
                 <option value="STAFF" ${role=='STAFF' ? 'selected' : ''}>Nhân viên</option>
                 <option value="PATIENT" ${role=='PATIENT' ? 'selected' : ''}>Bệnh nhân</option>
             </select>
+
+            <div id="department-filter" class="me-2" style="min-width: 150px">
+                <select class="d-inline-block form-select me-2" name="departmentId">
+                    <option value="" selected>Chọn phòng ban</option>
+                    <c:forEach var="department" items="${departments}">
+                        <option value="${department.id}" ${departmentId == department.id ? 'selected' : ''}>${department.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+
+            <select class="d-inline-block form-select me-2" name="active" aria-label="Lọc theo role">
+                <option value="">Chọn trạng thái</option>
+                <option value="true" ${active== true ? 'selected' : ''}>Đang động</option>
+                <option value="false" ${active== false ? 'selected' : ''}>Ngừng hoạt động</option>
+            </select>
+
             <button type="submit" class="btn btn-outline-primary">Lọc</button>
         </form>
         <div class="d-flex align-items-center">
-            <a href="${pageContext.request.contextPath}/admin/add-doctor" class="align-middle btn btn-outline-primary d-flex align-items-center me-2">
+            <a href="${pageContext.request.contextPath}/admin/add-doctor"
+               class="align-middle btn btn-outline-primary d-flex align-items-center me-2">
                 <ion-icon class="me-1" name="add-circle-outline"></ion-icon>
                 <span class="d-inline-block">Tạo bác sĩ</span>
             </a>
-            <a href="${pageContext.request.contextPath}/admin/add-staff" class="align-middle btn btn-outline-primary d-flex align-items-center">
+            <a href="${pageContext.request.contextPath}/admin/add-staff"
+               class="align-middle btn btn-outline-primary d-flex align-items-center">
                 <ion-icon class="me-1" name="add-circle-outline"></ion-icon>
                 <span class="d-inline-block">Tạo nhân viên</span>
             </a>
@@ -61,7 +72,7 @@
                 <c:if test="${role=='DOCTOR'}">
                     <th scope="col">Phòng ban</th>
                 </c:if>
-                <th scope="col">Giới tính </th>
+                <th scope="col">Giới tính</th>
                 <th scope="col">Số điện thoại</th>
                 <th scope="col">Email</th>
                 <th scope="col">Ngày sinh</th>
@@ -74,7 +85,7 @@
             <tbody>
             <c:if test="${empty accounts}">
                 <tr>
-                    <p class="text-center my-5">Không có tài khoản nào</p>
+                    <td colspan="12"><p class="text-center my-5">Không có tài khoản nào</p></td>
                 </tr>
             </c:if>
             <c:forEach items="${accounts}" var="acc" varStatus="loop">
@@ -85,9 +96,9 @@
                                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px"/>
                         </c:if>
                         <c:if test="${acc.avatar==null}">
-                            <img  id="frame" src="${pageContext.request.contextPath}/resources/images/person.jpg"
-                                  class="img-fluid mb-3 d-block"
-                                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px"/>
+                            <img id="frame" src="${pageContext.request.contextPath}/resources/images/person.jpg"
+                                 class="img-fluid mb-3 d-block"
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px"/>
                         </c:if>
                     </td>
 
@@ -95,7 +106,7 @@
                     <td>${acc.lastName != null ? acc.lastName : ''} ${acc.firstName != null ? acc.firstName : ''}</td>
                     <c:if test="${role=='DOCTOR'}">
                         <td>
-                            ${acc.department.name}
+                                ${acc.department.name}
                         </td>
                     </c:if>
                     <td>${acc.gender=='MALE' ? 'Nam' : acc.gender=='FEMALE' ? 'Nữ' : 'Khác' }</td>
@@ -104,9 +115,12 @@
                     <%
                         Account acc = (Account) pageContext.getAttribute("acc");
                     %>
-                    <td class="text-center"><%= DatetimeUtils.toString(acc.getDOB(), DateTimeConstants.DATE_FORMAT) %></td>
-                    <td class="text-center"><%= DatetimeUtils.toString(acc.getCreatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %></td>
-                    <td class="text-center"><%= DatetimeUtils.toString(acc.getUpdatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %></td>
+                    <td class="text-center"><%= DatetimeUtils.toString(acc.getDOB(), DateTimeConstants.DATE_FORMAT) %>
+                    </td>
+                    <td class="text-center"><%= DatetimeUtils.toString(acc.getCreatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %>
+                    </td>
+                    <td class="text-center"><%= DatetimeUtils.toString(acc.getUpdatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %>
+                    </td>
                     <td class="text-center">
                         <c:if test="${acc.active==true}">
                             <span class="badge bg-success">Đang hoạt động</span>
@@ -143,6 +157,23 @@
 
 <%--footer--%>
 <jsp:include page="../common/footer.jsp"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let role = $("#role-filter").find(":selected").val();
+        if (role !== 'DOCTOR') {
+            $("#department-filter").hide();
+        }
 
+        $("#role-filter").on('change', function toggleDepartmentFilter() {
+            let role = $(this).val();
+            console.log(role)
+            if (role === 'DOCTOR') {
+                $("#department-filter").show();
+            } else {
+                $("#department-filter").hide();
+            }
+        })
+    })
+</script>
 </body>
 </html>

@@ -26,7 +26,7 @@ import java.util.Calendar;
 public class CancelAppointmentController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
 
         AppointmentDao appointmentDao = new AppointmentDao();
@@ -62,7 +62,7 @@ public class CancelAppointmentController extends HttpServlet {
             // Send email
              EmailUtils.sendEmail(
                     ApplicationSettings.getGmailFrom(),
-                    appointment.getBooker().getEmail(),
+                    appointment.getPatientEmail(),
                     "[MEDICAL] Hủy lịch hẹn khám bệnh",
                     String.format("Cuộc hẹn khám bệnh của bạn vào: %s %s-%s với bác sĩ %s đã bị hủy. Xin lỗi vì sự bất tiện này.",
                             DatetimeUtils.toString(appointment.getShift().getDate(), DateTimeConstants.DATE_FORMAT),

@@ -2,8 +2,11 @@ package com.hospital.booking.controllers.doctor;
 
 import com.hospital.booking.constants.SessionConstants;
 import com.hospital.booking.daos.AppointmentDao;
+import com.hospital.booking.database.AppointmentQuery;
+import com.hospital.booking.enums.AppointmentStatus;
 import com.hospital.booking.models.Account;
 import com.hospital.booking.models.Appointment;
+import com.microsoft.sqlserver.jdbc.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +25,17 @@ public class AppointmentController extends HttpServlet {
         HttpSession session = req.getSession();
         Account account = (Account) session.getAttribute(SessionConstants.ACCOUNT);
 
+        AppointmentQuery query = new AppointmentQuery();
+        query.setDoctorId(account.getId());
+
+        String status = req.getParameter("status");
+        if (!StringUtils.isEmpty(status)) {
+            query.setStatus(AppointmentStatus.valueOf(status));
+            req.setAttribute("status", status);
+        }
+
         AppointmentDao appointmentDao = new AppointmentDao();
-        List<Appointment> appointments = appointmentDao.getAllByDoctor(account.getId());
+        List<Appointment> appointments = appointmentDao.getAll(query);
 
         req.setAttribute("appointments", appointments);
         req.getRequestDispatcher("/doctor/appointments.jsp").forward(req, resp);

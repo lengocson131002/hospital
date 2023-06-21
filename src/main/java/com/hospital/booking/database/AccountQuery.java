@@ -11,6 +11,7 @@ public class AccountQuery {
     private Boolean isActive;
     private Integer id;
     private String search;
+    private Integer departmentId;
     private Integer page;
 
     private Integer pageSize;
@@ -73,5 +74,13 @@ public class AccountQuery {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 }

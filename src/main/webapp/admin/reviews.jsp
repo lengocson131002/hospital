@@ -73,10 +73,10 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Avatar</th>
-                            <th scope="col">Full Name</th>
-                            <th scope="col">Department</th>
-                            <th scope="col">Score</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Phòng ban</th>
+                            <th scope="col">Số lần khám</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -103,9 +103,8 @@
                                 <td>
                                         ${doctor.department.name}
                                 </td>
-                                <td class="text-center">
-                                    <span class="d-inline-block me-1"><%= String.format("%,.1f", ((Account) pageContext.getAttribute("doctor")).getScore()) %></span>
-                                    <span class="d-inline-block" style="color: #ffd43b"><ion-icon name="star"></ion-icon></span>
+                                <td>
+                                    ${doctor.appointmentCount}
                                 </td>
                             </tr>
                         </c:forEach>

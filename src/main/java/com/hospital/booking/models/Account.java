@@ -25,6 +25,8 @@ public class Account extends BaseModel implements Cloneable{
 
     private Float score;
 
+    private int appointmentCount;
+
     public Account() {
         isActive = true;
     }
@@ -171,6 +173,14 @@ public class Account extends BaseModel implements Cloneable{
 
     public void setScore(Float score) {
         this.score = score;
+    }
+
+    public int getAppointmentCount() {
+        return appointmentCount;
+    }
+
+    public void setAppointmentCount(int appointmentCount) {
+        this.appointmentCount = appointmentCount;
     }
 
     @Override

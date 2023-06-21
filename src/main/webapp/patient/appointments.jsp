@@ -40,11 +40,22 @@
         <div>
             <h2>Lịch hẹn của tôi</h2>
         </div>
-        <div>
-            <a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/patient/create-appointment"> Đặt lịch hẹn</a>
-        </div>
     </div>
-
+    <div class="filter d-flex justify-content-between my-5">
+        <form class="d-flex align-items-center justify-content-between me-auto" method="get"
+              action="${pageContext.request.contextPath}/patient/appointments">
+            <select class="d-inline-block form-select me-2" name="status" aria-label="Lọc theo role">
+                <option value="">Chọn trạng thái</option>
+                <option value="CREATED" ${status=='CREATED' ? 'selected' : ''}>Mới khởi tạo</option>
+                <option value="FINISHED" ${status=='FINISHED' ? 'selected' : ''}>Chờ thanh toán</option>
+                <option value="COMPLETED" ${status=='COMPLETED' ? 'selected' : ''}>Đã hoàn thành</option>
+                <option value="CANCELED" ${status=='CANCELED' ? 'selected' : ''}>Đã hủy</option>
+            </select>
+            <button type="submit" class="btn btn-outline-primary">Lọc</button>
+        </form>
+        <a class="btn btn-outline-primary d-inline-block" href="${pageContext.request.contextPath}/patient/create-appointment"> Đặt
+            lịch hẹn</a>
+    </div>
     <div>
         <table class="table table-bordered table-hover">
             <thead>
@@ -68,48 +79,51 @@
                     <p class="text-center my-5">Bạn chưa có lịch hẹn nào</p>
                 </tr>
             </c:if>
-                <c:forEach items="${appointments}" var="appointment" varStatus="loop">
-                    <%
-                        Appointment appointment = (Appointment) pageContext.getAttribute("appointment");
-                        Shift shift = appointment.getShift();
-                        Slot slot = SlotUtils.getSlot(shift.getSlot());
-                        Account doctor = appointment.getDoctor();
+            <c:forEach items="${appointments}" var="appointment" varStatus="loop">
+                <%
+                    Appointment appointment = (Appointment) pageContext.getAttribute("appointment");
+                    Shift shift = appointment.getShift();
+                    Slot slot = SlotUtils.getSlot(shift.getSlot());
+                    Account doctor = appointment.getDoctor();
 
-                        pageContext.setAttribute("shift", shift);
-                        pageContext.setAttribute("slot", slot);
-                        pageContext.setAttribute("doctor", doctor);
-                    %>
-                    <tr>
-                        <td>${loop.index + 1}</td>
-                        <td><%= DatetimeUtils.toString(shift.getDate(), DateTimeConstants.DATE_FORMAT) %></td>
-                        <td>${shift.slot}</td>
-                        <td><%= slot != null ? String.format("%s-%s", slot.getStartTime(), slot.getEndTime()) : "" %></td>
-                        <td>${doctor.lastName} - ${doctor.firstName}</td>
-                        <td>${appointment.patientName}</td>
-                        <td>${appointment.patientPhoneNumber}</td>
-                        <td>${appointment.patientEmail}</td>
-                        <td><%=  DatetimeUtils.toString(appointment.getCreatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %></td>
-                        <td class="text-center">
-                            <c:if test="${appointment.status=='CREATED'}">
-                                <span class="badge bg-primary">Mới khởi tạo</span>
-                            </c:if>
-                            <c:if test="${appointment.status=='FINISHED'}">
-                                <span class="badge bg-warning">Chờ thanh toán</span>
-                            </c:if>
-                            <c:if test="${appointment.status=='COMPLETED'}">
-                                <span class="badge bg-success">Đã hoàn thành</span>
-                            </c:if>
-                            <c:if test="${appointment.status=='CANCELED'}">
-                                <span class="badge bg-danger">Đã hủy</span>
-                            </c:if>
-                        </td>
-                        <td class="text-center">
-                            <a href="${pageContext.request.contextPath}/patient/appointment?id=${appointment.id}">
-                                <ion-icon name="eye-outline"></ion-icon>
-                            </a>
-                        </td>
-                    </tr>
-                </c:forEach>
+                    pageContext.setAttribute("shift", shift);
+                    pageContext.setAttribute("slot", slot);
+                    pageContext.setAttribute("doctor", doctor);
+                %>
+                <tr>
+                    <td>${loop.index + 1}</td>
+                    <td><%= DatetimeUtils.toString(shift.getDate(), DateTimeConstants.DATE_FORMAT) %>
+                    </td>
+                    <td>${shift.slot}</td>
+                    <td><%= slot != null ? String.format("%s-%s", slot.getStartTime(), slot.getEndTime()) : "" %>
+                    </td>
+                    <td>${doctor.lastName} - ${doctor.firstName}</td>
+                    <td>${appointment.patientName}</td>
+                    <td>${appointment.patientPhoneNumber}</td>
+                    <td>${appointment.patientEmail}</td>
+                    <td><%=  DatetimeUtils.toString(appointment.getCreatedAt(), DateTimeConstants.DATE_TIME_FORMAT) %>
+                    </td>
+                    <td class="text-center">
+                        <c:if test="${appointment.status=='CREATED'}">
+                            <span class="badge bg-primary">Mới khởi tạo</span>
+                        </c:if>
+                        <c:if test="${appointment.status=='FINISHED'}">
+                            <span class="badge bg-warning">Chờ thanh toán</span>
+                        </c:if>
+                        <c:if test="${appointment.status=='COMPLETED'}">
+                            <span class="badge bg-success">Đã hoàn thành</span>
+                        </c:if>
+                        <c:if test="${appointment.status=='CANCELED'}">
+                            <span class="badge bg-danger">Đã hủy</span>
+                        </c:if>
+                    </td>
+                    <td class="text-center">
+                        <a href="${pageContext.request.contextPath}/patient/appointment?id=${appointment.id}">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </a>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
     </div>

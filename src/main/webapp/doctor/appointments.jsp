@@ -41,7 +41,18 @@
             <h2>Lịch hẹn của tôi</h2>
         </div>
     </div>
-
+    <div class="filter row my-5">
+        <form class="d-flex col-md-4 align-items-center justify-content-between" method="get" action="${pageContext.request.contextPath}/doctor/appointments">
+            <select class="d-inline-block form-select me-2" name="status" aria-label="Lọc theo role">
+                <option value="" >Chọn trạng thái</option>
+                <option value="CREATED" ${status=='CREATED' ? 'selected' : ''}>Mới khởi tạo</option>
+                <option value="FINISHED" ${status=='FINISHED' ? 'selected' : ''}>Chờ thanh toán</option>
+                <option value="COMPLETED" ${status=='COMPLETED' ? 'selected' : ''}>Đã hoàn thành</option>
+                <option value="CANCELED" ${status=='CANCELED' ? 'selected' : ''}>Đã hủy</option>
+            </select>
+            <button type="submit" class="btn btn-outline-primary">Lọc</button>
+        </form>
+    </div>
     <div>
         <table class="table table-bordered table-hover">
             <thead>

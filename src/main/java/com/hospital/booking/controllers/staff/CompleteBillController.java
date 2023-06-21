@@ -44,6 +44,7 @@ public class CompleteBillController extends HttpServlet {
         Appointment appointment = appointmentDao.getByBillId(bill.getId());
         if (appointment != null) {
             appointment.setStatus(AppointmentStatus.COMPLETED);
+            appointment.setBill(bill);
             appointmentDao.update(appointment);
         }
 

@@ -3,6 +3,7 @@ package com.hospital.booking.controllers.patient;
 import com.hospital.booking.constants.SessionConstants;
 import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.daos.AppointmentDao;
+import com.hospital.booking.daos.DepartmentDao;
 import com.hospital.booking.daos.ShiftDao;
 import com.hospital.booking.enums.AppointmentStatus;
 import com.hospital.booking.models.Account;
@@ -33,10 +34,14 @@ public class CreateAppointmentController extends HttpServlet {
         String dateParam = req.getParameter("date");
         LocalDate date = !StringUtils.isEmpty(dateParam) ? DatetimeUtils.toDate(dateParam, "yyyy-MM-dd") : null;
 
+
         req.setAttribute("name", name);
         req.setAttribute("email", email);
         req.setAttribute("phoneNumber", phoneNumber);
         req.setAttribute("date", date);
+
+        DepartmentDao departmentDao = new DepartmentDao();
+        req.setAttribute("departments", departmentDao.getAll());
 
         if (date != null) {
             ShiftDao shiftDao = new ShiftDao();

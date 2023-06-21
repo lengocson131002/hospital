@@ -56,9 +56,30 @@
                     String tomorrow = String.format("%04d-%02d-%02d", year, month, day);
                 %>
 
-                <div class="form-group mb-3">
+                <div class="form-group required mb-3">
                     <label class="form-label" for="date">Ngày khám</label>
-                    <input name="date" id="date" min="<%= tomorrow %>" value="${date}" type="date" class="form-control"/>
+                    <input required name="date" id="date" min="<%= tomorrow %>" value="${date}" type="date"
+                           class="form-control"/>
+                </div>
+
+                <div class="form-group required mb-3">
+                    <label class="form-label" for="department-filter">Phòng ban</label>
+                    <select class="d-inline-block form-select me-2" name="departmentId" required id="department-filter">
+                        <option value="" selected>Chọn phòng ban</option>
+                        <c:forEach var="department" items="${departments}">
+                            <option value="${department.id}" ${departmentId == department.id ? 'selected' : ''}>${department.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <div class="form-group required mb-3">
+                    <label class="form-label" for="doctor-filter">Bác sĩ</label>
+                    <select class="d-inline-block form-select me-2" name="doctorId" id="doctor-filter" required>
+                        <option value="" selected>Chọn bác sĩ</option>
+                        <c:forEach var="doctor" items="${doctors}">
+                            <option value="${doctor.id}" ${doctorId == department.id ? 'selected' : ''}>${doctor.firstName} ${doctor.lastName}</option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div class="form-group mb-3">
@@ -68,7 +89,8 @@
 
                 <div class="text-center text-lg-start mt-4 pt-2">
                     <button id="booking-button" type="submit" class="btn btn-primary" disabled>Đặt lịch</button>
-                    <a href="${pageContext.request.contextPath}/patient/appointments" class="btn-outline-danger btn">Trở lại</a>
+                    <a href="${pageContext.request.contextPath}/patient/appointments" class="btn-outline-danger btn">Trở
+                        lại</a>
                 </div>
             </div>
             <div class="col-6">
@@ -100,24 +122,60 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#date").on('change', function updateShift() {
+        $("#department-filter").on('change', function updateDoctors() {
             let contextPath = '<%=request.getContextPath()%>';
-            let date = $(this).val();
+            let departmentId = $(this).val();
+
+            $("#shift-table-body").html("");
 
             $.ajax({
-                url: contextPath + '/patient/shifts-by-date',
+                url: contextPath + '/patient/filter-doctors',
                 type: 'get',
                 data: {
-                    date: date
+                    departmentId: departmentId
                 },
                 success: function (response) {
+                    console.log(response)
+                    $("#doctor-filter").html("");
+                    $("#doctor-filter").append('<option value="">Chọn bác sĩ</option>')
+                    response.forEach((doctor, index) => {
+                        $("#doctor-filter").append('<option value="' + doctor.id + '">' + doctor.lastName + ' ' + doctor.firstName + '</option>');
+                    })
+                },
+                error: function (error) {
+
+                }
+            })
+        })
+
+        $("#doctor-filter").on('change', updateShift)
+        $("#date").on('change', updateShift)
+
+        function updateShift() {
+            let contextPath = '<%=request.getContextPath()%>';
+            let doctorId = $("#doctor-filter").val();
+            let date = $('#date').val();
+
+            if (!doctorId || !date || date.length === 0) {
+                return;
+            }
+            $.ajax({
+                url: contextPath + '/patient/filter-shifts',
+                type: 'get',
+                data: {
+                    date: $("#date").val(),
+                    doctorId: doctorId
+                },
+                success: function (response) {
+                    $("#shift-table-body").html("");
+
                     if (response && response.length > 0) {
-                        $("#booking-button").prop("disabled", false)
+                        $("#booking-button").prop("disabled", false);
                     } else {
-                        $("#booking-button").prop("disabled", true)
+                        $("#booking-button").prop("disabled", true);
+                        $("#shift-table-body").html('<div colspan="5" class="w-100 my-2 text-center">Không có ca làm việc nào!</div>');
                     }
 
-                    $("#shift-table-body").html("");
                     response.forEach((shift, index) => {
                         $("#shift-table-body").append(
                             '<tr>' +
@@ -135,7 +193,7 @@
 
                 }
             })
-        })
+        }
     })
 </script>
 </body>

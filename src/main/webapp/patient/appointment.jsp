@@ -231,7 +231,9 @@
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <c:if test="${appointment.status=='CREATED'}">
                             <button id="booking-button" type="submit" class="btn btn-primary me-2">Cập nhật</button>
-                            <a href="${pageContext.request.contextPath}/patient/cancel-appointment?id=${appointment.id}" id="cancel-button" class="btn btn-outline-danger me-2">Hủy lịch hẹn</a>
+                            <button id="cancel-button"  class="btn btn-outline-danger me-2" data-bs-toggle="modal"
+                                    data-bs-target="#cancelModal">Hủy lịch hẹn
+                            </button>
                         </c:if>
                         <a href="${pageContext.request.contextPath}/patient/appointments"
                            class="btn-outline-danger btn d-inline-block me-2">Trở lại</a>
@@ -261,6 +263,36 @@
             </div>
         </div>
     </form>
+
+    <div class="modal fade" id="cancelModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post"
+                  action="${pageContext.request.contextPath}/patient/cancel-appointment">
+                <input type="hidden" name="id" value="${appointment.id}"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Hủy lịch hẹn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-4 form-group required">
+                            <label for="content" class="form-label">Lý do hủy lịch hẹn:</label>
+                            <textarea required class="form-control required" name="cancelReason"
+                                      id="reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Hủy lịch hẹn</button>
+                        <button type="button" class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">Thoát
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <%--footer--%>
