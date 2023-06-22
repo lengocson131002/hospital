@@ -103,7 +103,7 @@ public class BillDao {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-               statu Bill bill = new Bill();
+                Bill bill = new Bill();
                 bill.setId(resultSet.getInt("Id"));
                 bill.setPrice(resultSet.getDouble("Price"));
 

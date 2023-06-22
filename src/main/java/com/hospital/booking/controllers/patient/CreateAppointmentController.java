@@ -70,17 +70,17 @@ public class CreateAppointmentController extends HttpServlet {
         AppointmentDao appointmentDao = new AppointmentDao();
 
         Shift shift = shiftDao.getById(shiftId);
-        if (shift == null || shift.getDoctor() == null) {
-            req.setAttribute("error", "Lịch làm việc không hợp lệ");
-            req.getRequestDispatcher("/patient/create-appointment.jsp").forward(req, resp);
+        if (shift == null || shift.getDoctor() == null || shift.isBooked()) {
+            session.setAttribute("error", "Lịch làm việc không hợp lệ");
+            resp.sendRedirect(req.getContextPath() + "/patient/create-appointment");
             return;
         }
 
 
         Account doctor = accountDao.getAccountById(shift.getDoctor().getId());
         if (doctor == null) {
-            req.setAttribute("error", "Bác sĩ được chọn không hợp lệ");
-            req.getRequestDispatcher("/patient/create-appointment.jsp").forward(req, resp);
+            session.setAttribute("error", "Bác sĩ được chọn không hợp lệ hoặc đã có người đặt. Vui lòng chọn lại");
+            resp.sendRedirect(req.getContextPath() + "/patient/create-appointment");
             return;
         }
 
@@ -95,12 +95,12 @@ public class CreateAppointmentController extends HttpServlet {
         appointment.setStatus(AppointmentStatus.CREATED);
 
         if (!appointmentDao.insertAppointment(appointment)) {
-            req.setAttribute("error", "Có lỗi xảy ra. Vui lòng thử lại");
-            req.getRequestDispatcher("/patient/create-appointment.jsp").forward(req, resp);
+            session.setAttribute("error", "Có lỗi xảy ra. Vui lòng thử lại");
+            resp.sendRedirect(req.getContextPath() + "/patient/create-appointment");
             return;
         }
 
-        req.setAttribute("message", "Update profile successfully");
+        session.setAttribute("message", "Tạo lịch hẹn thành công");
         resp.sendRedirect(req.getContextPath() + "/patient/appointments");
 
     }

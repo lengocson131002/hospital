@@ -28,7 +28,6 @@ public class BillController extends HttpServlet {
             billStatus = BillStatus.valueOf(status);
         }
 
-
         LocalDateTime billFrom = null;
         String from = req.getParameter("from");
         if (!StringUtils.isEmpty(from)) {
@@ -42,6 +41,7 @@ public class BillController extends HttpServlet {
         }
 
         List<Bill> bills = billDao.getAll(billFrom, billTo, billStatus, null, null);
+
         req.setAttribute("bills", bills);
         req.setAttribute("status", status);
         req.setAttribute("from", from);

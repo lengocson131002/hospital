@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/staff/bill")
@@ -26,6 +27,8 @@ public class BillDetailController extends HttpServlet {
         int id = Integer.parseInt(billId);
         Bill bill = billDao.getById(id);
         if (bill == null) {
+            HttpSession session = req.getSession();
+            session.setAttribute("error", " Không tìm thấy hoá đơn");
             resp.sendRedirect(req.getContextPath() + "/staff/bills");
             return;
         }

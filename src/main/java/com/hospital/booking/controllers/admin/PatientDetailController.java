@@ -57,4 +57,5 @@ public class PatientDetailController extends HttpServlet {
         req.setAttribute("acc", account);
         req.getRequestDispatcher("/admin/patient.jsp").forward(req, resp);
     }
+
 }
