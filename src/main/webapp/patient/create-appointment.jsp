@@ -106,6 +106,7 @@
                         <th scope="col">Ngày khám</th>
                         <th scope="col">Slot</th>
                         <th scope="col">Giờ khám</th>
+                        <th scope="col">Trạng thái</th>
                     </tr>
                     </thead>
                     <tbody id="shift-table-body">
@@ -177,15 +178,18 @@
                     }
 
                     response.forEach((shift, index) => {
+                        let booked = shift.booked;
+
                         $("#shift-table-body").append(
                             '<tr>' +
                             '   <td class="text-center"> ' +
-                            '       <input required type="radio" name="shiftId" value="' + shift.id + '"/>' +
+                            '       <input' + (booked ? 'disabled' : '') + ' required type="radio" name="shiftId" value="' + shift.id + '"/>' +
                             '   </td>' +
                             '   <td>' + shift.doctor?.lastName + ' ' + shift.doctor?.firstName + '</td>' +
                             '   <td>' + shift.date.day + '/' + shift.date.month + '/' + shift.date.year + '</td>' +
                             '   <td>' + shift.slot + '</td>' +
                             '   <td>' + shift.slotInfo?.startTime + '-' + shift.slotInfo?.endTime + '</td>' +
+                            '   <td>' + (booked ? '<span class="badge bg-danger">Đã đặt</span>' : '<span class="badge bg-success">Chưa đặt</span>') + '</td>' +
                             '</tr>')
                     })
                 },

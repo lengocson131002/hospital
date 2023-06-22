@@ -32,7 +32,7 @@ public class ScheduleController extends HttpServlet {
 
         Account account = (Account) req.getSession().getAttribute(SessionConstants.ACCOUNT);
 
-        List<LocalDate> weeklyDays = DatetimeUtils.getWeeklyDays(true);
+        List<LocalDate> weeklyDays = DatetimeUtils.getWeeklyDays(false);
 
         ShiftDao shiftDao = new ShiftDao();
         for (LocalDate date : weeklyDays) {
@@ -53,18 +53,15 @@ public class ScheduleController extends HttpServlet {
             days.put(date, dailySlots);
         }
 
-        HashMap<String, List<Slot>> dayMappings = days.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .collect(Collectors.toMap(
-                        entry -> DatetimeUtils.toString(entry.getKey(), DateTimeConstants.DATE_FORMAT),
-                        Map.Entry::getValue,
-                        (d1, d2) -> d1,
-                        LinkedHashMap::new
-                ));
+        SortedSet<LocalDate> keys = new TreeSet<>(days.keySet());
+        HashMap<LocalDate, List<Slot>> sortedDays = new HashMap<>();
+        for (LocalDate key: keys) {
+            sortedDays.put(key, days.get(key));
+        }
 
         req.setAttribute("from", DatetimeUtils.toString(weeklyDays.get(0), DateTimeConstants.DATE_FORMAT));
         req.setAttribute("to", DatetimeUtils.toString(weeklyDays.get(weeklyDays.size() - 1), DateTimeConstants.DATE_FORMAT));
-        req.setAttribute("days", dayMappings);
+        req.setAttribute("days", sortedDays);
         req.getRequestDispatcher("/doctor/schedule.jsp").forward(req, resp);
     }
 
@@ -75,7 +72,7 @@ public class ScheduleController extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         try {
-            LocalDate date = DatetimeUtils.toDate(req.getParameter("date"), DateTimeConstants.DATE_FORMAT);
+            LocalDate date = DatetimeUtils.toDate(req.getParameter("date"), "yyyy-MM-dd");
             int slot = Integer.parseInt(req.getParameter("slot"));
             boolean selected = Boolean.parseBoolean(req.getParameter("selected"));
             Account account = (Account) req.getSession().getAttribute(SessionConstants.ACCOUNT);

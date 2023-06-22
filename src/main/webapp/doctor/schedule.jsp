@@ -50,15 +50,16 @@
                 </tr>
                 </thead>
                 <tbody>
+                <c:set var="today" value="<%= java.time.LocalDate.now()%>"/>
                 <c:forEach items="${days}" var="d">
                     <tr>
-                        <th scope="row">${d.key}</th>
+                        <th class="text-center" style="min-width: 120px;" scope="row">${d.key} ${d.key == today ? '(Hôm nay)' : ''}</th>
                         <td>
                             <c:forEach items="${d.value}" var="slot">
                                 <div class="form-check">
                                     <input name="${d.key}" class="form-check-input slot-check" type="checkbox"
                                            value="${slot.number}" id="${d.key}-${slot.number}"
-                                        ${slot.status=='BOOKED' ? 'disabled' : ''}
+                                        ${slot.status=='BOOKED' || d.key <= today ? 'disabled' : ''}
                                         ${slot.status=='SHIFTED' ? 'checked' : ''}
                                     >
                                     <label class="form-check-label ${slot.status=='BOOKED' ? 'bg-success' : ''}" for="${d.key}-${slot.number}">

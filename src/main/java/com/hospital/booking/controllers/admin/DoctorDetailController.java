@@ -2,9 +2,11 @@ package com.hospital.booking.controllers.admin;
 
 import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.daos.DepartmentDao;
+import com.hospital.booking.daos.ReviewDao;
 import com.hospital.booking.enums.Gender;
 import com.hospital.booking.models.Account;
 import com.hospital.booking.models.Department;
+import com.hospital.booking.models.Review;
 import com.microsoft.sqlserver.jdbc.StringUtils;
 
 import javax.servlet.ServletException;
@@ -12,9 +14,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @WebServlet("/admin/doctor")
 public class DoctorDetailController extends HttpServlet {
@@ -28,6 +32,10 @@ public class DoctorDetailController extends HttpServlet {
             if (account != null) {
                 DepartmentDao departmentDao = new DepartmentDao();
                 req.setAttribute("departments", departmentDao.getAll());
+
+                ReviewDao reviewDao = new ReviewDao();
+                List<Review> reviews = reviewDao.getDoctorReview(id);
+                req.setAttribute("doctorReviews", reviews);
                 req.setAttribute("acc", account);
                 req.getRequestDispatcher("/admin/doctor.jsp").forward(req, resp);
                 return;
@@ -40,14 +48,16 @@ public class DoctorDetailController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+
         String accId = req.getParameter("id");
         Account account;
 
         AccountDao accountDao = new AccountDao();
         if (!StringUtils.isInteger(accId)
                 || (account = accountDao.getAccountById(Integer.parseInt(accId))) == null) {
-            req.setAttribute("error", "Không tìm thấy tài khoản");
-            req.getRequestDispatcher("/admin/doctor.jsp").forward(req, resp);
+            session.setAttribute("error", "Không tìm thấy tài khoản");
+            resp.sendRedirect(req.getContextPath() + "/admin/accounts");
             return;
         }
 
@@ -81,19 +91,17 @@ public class DoctorDetailController extends HttpServlet {
         Account existedAcc = accountDao.getAccountByEmail(account.getEmail());
         if (existedAcc != null && existedAcc.getId() != account.getId()) {
             hasError = true;
-            req.setAttribute("error", "Email đã tồn tại");
+            session.setAttribute("error", "Email đã tồn tại");
         }
 
         if (!hasError) {
             if (accountDao.update(account)) {
-                req.setAttribute("message", "Cập nhật tài khoản bác sĩ thành công");
+                session.setAttribute("message", "Cập nhật tài khoản bác sĩ thành công");
             } else {
-                req.setAttribute("error", "Đã có lỗi xảy ra. Vui lòng thử lại");
+                session.setAttribute("error", "Đã có lỗi xảy ra. Vui lòng thử lại");
             }
         }
 
-        req.setAttribute("departments", departmentDao.getAll());
-        req.setAttribute("acc", account);
-        req.getRequestDispatcher("/admin/doctor.jsp").forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/admin/doctor?id=" + accId);
     }
 }

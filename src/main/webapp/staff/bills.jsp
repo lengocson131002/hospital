@@ -26,6 +26,32 @@
         </div>
     </div>
 
+    <div class="filter row my-5">
+        <form class="d-flex col-md-4 align-items-end justify-content-between" method="get"
+              action="${pageContext.request.contextPath}/staff/bills">
+            <div class="form-group me-2" style="min-width: 150px">
+                <label for="status" class="mb-2">Trạng thái:</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="" selected>Chọn trạng thái</option>
+                    <option value="CREATED" ${status=='CREATED' ? 'selected' : ''}>Mới khởi tạo</option>
+                    <option value="COMPLETED" ${status=='COMPLETED' ? 'selected' : ''}>Đã hoàn thành</option>
+                </select>
+            </div>
+
+            <div class="form-group me-2">
+                <label for="from" class="mb-2">Từ ngày:</label>
+                <input name="from" id="from" value="${from}" type="date" class="form-control" placeholder="Từ ngày"/>
+            </div>
+
+            <div class="form-group me-2">
+                <label for="to" class="mb-2">Đến ngày:</label>
+                <input name="to" id="to" value="${to}" type="date" class="form-control" placeholder="Đến ngày"/>
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary">Lọc</button>
+        </form>
+    </div>
+
     <div>
         <table class="table table-bordered table-hover">
             <thead>

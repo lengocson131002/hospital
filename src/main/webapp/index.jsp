@@ -210,14 +210,7 @@
                                 </div>
                                 <div class="member-info">
                                     <h4 class="d-inline-block me-2">${doctor.lastName} ${doctor.firstName}</h4>
-                                    <div class="text-center d-flex align-items-center">
-                                        <p class="d-inline-block me-1"><%= String.format("%,.1f", ((Account) pageContext.getAttribute("doctor")).getScore()) %>
-                                        </p>
-                                        <p class="d-inline-block" style="color: #ffd43b">
-                                            <ion-icon
-                                                    name="star"></ion-icon>
-                                        </p>
-                                    </div>
+
                                     <span>${doctor.department.name}</span>
                                     <p>${doctor.description}</p>
                                     <div class="social">

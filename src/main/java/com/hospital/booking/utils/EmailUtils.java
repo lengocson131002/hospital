@@ -35,7 +35,7 @@ public class EmailUtils {
             msg.setRecipients(Message.RecipientType.TO, toAddresses);
             msg.setSubject(subject);
             msg.setSentDate(new Date());
-            msg.setText(message);
+            msg.setContent(message, "text/plain; charset=UTF-8");
 
             // sends the e-mail
             Transport.send(msg);

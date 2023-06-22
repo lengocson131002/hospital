@@ -87,7 +87,7 @@ public class BillDao {
             statement.setTimestamp(3, sqlFrom);
             statement.setTimestamp(4, sqlFrom);
 
-            Timestamp sqlTo = from != null ? Timestamp.valueOf(to) : null;
+            Timestamp sqlTo = to != null ? Timestamp.valueOf(to) : null;
             statement.setTimestamp(5, sqlTo);
             statement.setTimestamp(6, sqlTo);
 
@@ -103,7 +103,7 @@ public class BillDao {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Bill bill = new Bill();
+               statu Bill bill = new Bill();
                 bill.setId(resultSet.getInt("Id"));
                 bill.setPrice(resultSet.getDouble("Price"));
 

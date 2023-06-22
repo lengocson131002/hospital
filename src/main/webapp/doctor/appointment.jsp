@@ -52,16 +52,16 @@
                     </c:if>
                 </p>
 
-                <div class="form-group required mb-3">
+                <div class="form-group mb-3">
                     <label class="form-label" for="name">Họ và tên</label>
-                    <input disabled name="name" type="text" id="name" class="form-control" required
+                    <input disabled name="name" type="text" id="name" class="form-control"
                            value="${appointment.patientName}"/>
                 </div>
 
-                <div class="form-group mb-3 required">
+                <div class="form-group mb-3">
                     <label class="form-label" for="phoneNumber">Số điện thoại</label>
                     <input disabled name="phoneNumber" id="phoneNumber" value="${appointment.patientPhoneNumber}"
-                           class="form-control" required/>
+                           class="form-control"/>
                 </div>
 
                 <div class="form-group mb-3">
@@ -91,7 +91,8 @@
 
                     <div class="form-group mb-3 col-6">
                         <label class="form-label" for="time">Thời gian</label>
-                        <input name="time" id="time" value="${slot.startTime} - ${slot.endTime}" disabled class="form-control"/>
+                        <input name="time" id="time" value="${slot.startTime} - ${slot.endTime}" disabled
+                               class="form-control"/>
                     </div>
                 </div>
 
@@ -101,23 +102,55 @@
                               class="form-control">${appointment.patientNote}</textarea>
                 </div>
 
-                <div class="form-group mb-3 required">
+                <div class="form-group mb-3">
                     <label class="form-label" for="doctorNote">Ghi chú của bác sĩ</label>
-                    <textarea name="doctorNote" id="doctorNote" type="text" class="form-control"
-                              required>${appointment.doctorNote}</textarea>
+                    <textarea name="doctorNote" id="doctorNote" type="text"
+                              class="form-control">${appointment.doctorNote}</textarea>
                 </div>
 
                 <div class="text-center text-lg-start mt-4 pt-2">
                     <c:if test="${appointment.status=='CREATED'}">
                         <button id="booking-button" type="submit" class="btn btn-primary me-2">Hoàn thành</button>
-                        <a href="${pageContext.request.contextPath}/doctor/cancel-appointment?id=${appointment.id}" id="cancel-button" class="btn btn-outline-danger me-2">Hủy lịch hẹn</a>
+                        <button id="cancel-button" type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal"
+                                data-bs-target="#cancelModal">Hủy lịch hẹn
+                        </button>
                     </c:if>
                     <a href="${pageContext.request.contextPath}/doctor/appointments" class="btn btn-outline-danger">Trở
-                        lại danh sách</a>
+                        lại </a>
                 </div>
             </div>
         </div>
     </form>
+
+    <div class="modal fade" id="cancelModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="post"
+                  action="${pageContext.request.contextPath}/doctor/cancel-appointment">
+                <input type="hidden" name="id" value="${appointment.id}"/>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Hủy lịch hẹn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-4 form-group required">
+                            <label for="reason" class="form-label">Lý do hủy lịch hẹn:</label>
+                            <textarea required class="form-control required" name="cancelReason"
+                                      id="reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Hủy lịch hẹn</button>
+                        <button type="button" class="btn btn-outline-danger"
+                                data-bs-dismiss="modal">Thoát
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <%--footer--%>

@@ -1,7 +1,3 @@
-<%@ page import="com.hospital.booking.utils.ApplicationCore" %>
-<%@ page import="com.hospital.booking.utils.ApplicationSettings" %>
-<%@ page import="com.hospital.booking.constants.GoogleConstants" %>
-<%@ page import="java.time.LocalDate" %>
 <%@ page import="com.hospital.booking.utils.DatetimeUtils" %>
 <%@ page import="com.hospital.booking.models.Shift" %>
 <%@ page import="com.hospital.booking.models.Slot" %>
@@ -42,18 +38,31 @@
         </div>
     </div>
     <div class="filter d-flex justify-content-between my-5">
-        <form class="d-flex align-items-center justify-content-between me-auto" method="get"
+        <form class="d-flex align-items-end justify-content-between me-auto" method="get"
               action="${pageContext.request.contextPath}/patient/appointments">
-            <select class="d-inline-block form-select me-2" name="status" aria-label="Lọc theo role">
-                <option value="">Chọn trạng thái</option>
-                <option value="CREATED" ${status=='CREATED' ? 'selected' : ''}>Mới khởi tạo</option>
-                <option value="FINISHED" ${status=='FINISHED' ? 'selected' : ''}>Chờ thanh toán</option>
-                <option value="COMPLETED" ${status=='COMPLETED' ? 'selected' : ''}>Đã hoàn thành</option>
-                <option value="CANCELED" ${status=='CANCELED' ? 'selected' : ''}>Đã hủy</option>
-            </select>
+            <div class="form-group me-2" style="min-width: 150px">
+                <label for="status" class="mb-2">Trạng thái:</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="" selected>Chọn trạng thái</option>
+                    <option value="CREATED" ${status=='CREATED' ? 'selected' : ''}>Mới khởi tạo</option>
+                    <option value="FINISHED" ${status=='FINISHED' ? 'selected' : ''}>Chờ thanh toán</option>
+                    <option value="COMPLETED" ${status=='COMPLETED' ? 'selected' : ''}>Đã hoàn thành</option>
+                    <option value="CANCELED" ${status=='CANCELED' ? 'selected' : ''}>Đã hủy</option>
+                </select>
+            </div>
+
+            <div class="form-group me-2">
+                <label for="from" class="mb-2">Từ ngày:</label>
+                <input name="from" id="from" value="${from}" type="date" class="form-control" placeholder="Từ ngày"/>
+            </div>
+
+            <div class="form-group me-2">
+                <label for="to" class="mb-2">Đến ngày:</label>
+                <input name="to" id="to" value="${to}" type="date" class="form-control" placeholder="Đến ngày"/>
+            </div>
             <button type="submit" class="btn btn-outline-primary">Lọc</button>
         </form>
-        <a class="btn btn-outline-primary d-inline-block" href="${pageContext.request.contextPath}/patient/create-appointment"> Đặt
+        <a class="btn btn-outline-primary d-inline-block mt-auto" href="${pageContext.request.contextPath}/patient/create-appointment"> Đặt
             lịch hẹn</a>
     </div>
     <div>
@@ -97,7 +106,7 @@
                     <td>${shift.slot}</td>
                     <td><%= slot != null ? String.format("%s-%s", slot.getStartTime(), slot.getEndTime()) : "" %>
                     </td>
-                    <td>${doctor.lastName} - ${doctor.firstName}</td>
+                    <td>${doctor.lastName} ${doctor.firstName}</td>
                     <td>${appointment.patientName}</td>
                     <td>${appointment.patientPhoneNumber}</td>
                     <td>${appointment.patientEmail}</td>

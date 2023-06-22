@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -27,14 +28,15 @@ public class CancelAppointmentController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
+        HttpSession session = req.getSession();
 
+        int id = Integer.parseInt(req.getParameter("id"));
         AppointmentDao appointmentDao = new AppointmentDao();
         Appointment appointment = appointmentDao.getById(id);
 
         if (appointment == null || appointment.getShift() == null) {
-            req.setAttribute("error", "Không tìm thấy lịch hẹn yêu cầu");
-            req.getRequestDispatcher("/doctor/appointments.jsp").forward(req, resp);
+            session.setAttribute("error", "Không tìm thấy lịch hẹn yêu cầu");
+            resp.sendRedirect(req.getContextPath() + "/doctor/appointments");
             return;
         }
 
@@ -48,33 +50,33 @@ public class CancelAppointmentController extends HttpServlet {
         System.out.println(minutes);
 
         if (startTime.isAfter(LocalDateTime.now()) && minutes <= AppointmentConstants.BLOCK_APPOINTMENT_BEFORE) {
-            req.setAttribute("error", String.format("Huỷ lịch hẹn thất bại. Bạn chỉ có thể hủy trước %d phút khi cuộc hẹn diễn ra.",AppointmentConstants.BLOCK_APPOINTMENT_BEFORE));
-            req.setAttribute("appointment", appointment);
-            req.getRequestDispatcher("/doctor/appointment.jsp").forward(req, resp);
+            session.setAttribute("error", String.format("Huỷ lịch hẹn thất bại. Bạn chỉ có thể hủy trước %d phút khi cuộc hẹn diễn ra.",AppointmentConstants.BLOCK_APPOINTMENT_BEFORE));
+            resp.sendRedirect( req.getContextPath() + "/doctor/appointments");
             return;
         }
 
-        appointment.setDoctorNote(req.getParameter("doctorNote"));
         appointment.setStatus(AppointmentStatus.CANCELED);
         if (!appointmentDao.update(appointment)) {
-            req.setAttribute("error", "Huỷ lịch hẹn thất bại. Vui lòng thử lại!");
+            session.setAttribute("error", "Huỷ lịch hẹn thất bại. Vui lòng thử lại!");
         } else {
             // Send email
+            String reason = req.getParameter("cancelReason");
              EmailUtils.sendEmail(
                     ApplicationSettings.getGmailFrom(),
                     appointment.getPatientEmail(),
                     "[MEDICAL] Hủy lịch hẹn khám bệnh",
-                    String.format("Cuộc hẹn khám bệnh của bạn vào: %s %s-%s với bác sĩ %s đã bị hủy. Xin lỗi vì sự bất tiện này.",
+                    String.format("Cuộc hẹn khám bệnh của bạn vào: %s %s-%s với bác sĩ %s đã bị hủy.\nLý do hủy: %s.\nXin lỗi vì sự bất tiện này.",
                             DatetimeUtils.toString(appointment.getShift().getDate(), DateTimeConstants.DATE_FORMAT),
                             slot.getStartTime(),
                             slot.getEndTime(),
-                            appointment.getDoctor().getLastName() + " " + appointment.getDoctor().getLastName()));
+                            appointment.getDoctor().getLastName() + " " + appointment.getDoctor().getFirstName(),
+                            reason
+                     ));
 
-            req.setAttribute("message", "Hủy lịch hẹn thành công. Đã gửi thông báo đến bệnh nhân.");
+            session.setAttribute("message", "Hủy lịch hẹn thành công. Đã gửi thông báo đến bệnh nhân.");
         }
 
-        req.setAttribute("appointment", appointment);
-        req.getRequestDispatcher("/doctor/appointment.jsp").forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/doctor/appointment?id=" + appointment.getId());
     }
 
 }

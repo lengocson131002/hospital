@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 public class ReviewDao {
 
-    List<Review> getAll(ReviewQuery query) {
+    public List<Review> getAll(ReviewQuery query) {
         if (query == null) {
             query = new ReviewQuery();
         }

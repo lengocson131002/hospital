@@ -23,17 +23,22 @@
             <h2>Quản lý tài khoản</h2>
         </div>
     </div>
-    <div class="mb-5 gy-2 d-flex flex-md-row flex-column justify-content-between align-items-start g-2">
-        <form class="d-flex align-items-center justify-content-between me-auto mb-md-0 mb-3" method="get"
+    <div class="mb-5 gy-2 d-flex flex-md-row flex-column justify-content-between align-items-end g-2">
+        <form class="d-flex align-items-end justify-content-between me-auto mb-md-0 mb-3" method="get"
               action="${pageContext.request.contextPath}/admin/accounts">
-            <select class="d-inline-block form-select me-2" name="role" aria-label="Lọc theo role" id="role-filter">
-                <option value="DOCTOR" ${role=='DOCTOR' ? 'selected' : ''}>Bác sĩ</option>
-                <option value="STAFF" ${role=='STAFF' ? 'selected' : ''}>Nhân viên</option>
-                <option value="PATIENT" ${role=='PATIENT' ? 'selected' : ''}>Bệnh nhân</option>
-            </select>
+            <div class="form-group me-2">
+                <label class="mb-2" for="role-filter">Vai trò</label>
+                <select class="d-inline-block form-select me-2" name="role" aria-label="Lọc theo role" id="role-filter">
+                    <option value="DOCTOR" ${role=='DOCTOR' ? 'selected' : ''}>Bác sĩ</option>
+                    <option value="STAFF" ${role=='STAFF' ? 'selected' : ''}>Nhân viên</option>
+                    <option value="PATIENT" ${role=='PATIENT' ? 'selected' : ''}>Bệnh nhân</option>
+                </select>
+            </div>
 
-            <div id="department-filter" class="me-2" style="min-width: 150px">
-                <select class="d-inline-block form-select me-2" name="departmentId">
+
+            <div id="department-filter" class="me-2 form-group" style="min-width: 150px">
+                <label class="mb-2" for="department-filter-select">Phòng ban</label>
+                <select class="d-inline-block form-select me-2" name="departmentId" id="department-filter-select">
                     <option value="" selected>Chọn phòng ban</option>
                     <c:forEach var="department" items="${departments}">
                         <option value="${department.id}" ${departmentId == department.id ? 'selected' : ''}>${department.name}</option>
@@ -41,11 +46,14 @@
                 </select>
             </div>
 
-            <select class="d-inline-block form-select me-2" name="active" aria-label="Lọc theo role">
-                <option value="">Chọn trạng thái</option>
-                <option value="true" ${active== true ? 'selected' : ''}>Đang động</option>
-                <option value="false" ${active== false ? 'selected' : ''}>Ngừng hoạt động</option>
-            </select>
+            <div class="form-group me-2">
+                <label class="mb-2" for="status">Trạng thái</label>
+                <select id="status" class="d-inline-block form-select me-2" name="active" aria-label="Lọc theo role">
+                    <option value="">Chọn trạng thái</option>
+                    <option value="true" ${active== true ? 'selected' : ''}>Đang động</option>
+                    <option value="false" ${active== false ? 'selected' : ''}>Ngừng hoạt động</option>
+                </select>
+            </div>
 
             <button type="submit" class="btn btn-outline-primary">Lọc</button>
         </form>
