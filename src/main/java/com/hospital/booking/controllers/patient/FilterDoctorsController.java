@@ -1,6 +1,9 @@
 package com.hospital.booking.controllers.patient;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.hospital.booking.adapters.LocalDateTimeTypeAdapter;
+import com.hospital.booking.adapters.LocalDateTypeAdapter;
 import com.hospital.booking.daos.AccountDao;
 import com.hospital.booking.database.AccountQuery;
 import com.hospital.booking.models.Account;
@@ -13,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +31,7 @@ public class FilterDoctorsController extends HttpServlet {
         try {
             if (!StringUtils.isEmpty(req.getParameter("departmentId"))) {
                 AccountQuery query = new AccountQuery();
+                query.setActive(true);
                 int departmentId = Integer.parseInt(req.getParameter("departmentId"));
 
                 query.setDepartmentId(departmentId);
@@ -38,7 +44,11 @@ public class FilterDoctorsController extends HttpServlet {
             ex.printStackTrace();
         }
 
-        String jsonResult = new Gson().toJson(doctors);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
+        String jsonResult = gson.toJson(doctors);
         PrintWriter out = resp.getWriter();
         out.println(jsonResult);
         out.flush();

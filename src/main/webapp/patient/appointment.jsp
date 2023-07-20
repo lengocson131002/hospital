@@ -204,6 +204,27 @@
                         <textarea name="note" id="patientNote" type="text" readonly class="form-control">${appointment.patientNote}</textarea>
                     </div>
 
+                    <div class="form-group required mb-3">
+                        <div class="d-flex">
+                            <div class="form-check me-4">
+                                <input class="form-check-input" type="radio" name="reExamination" id="active"
+                                       value="false" disabled ${appointment.reExamination==false?'checked': ''}>
+                                <label class="form-check-label" for="active">
+                                    <span class="badge bg-danger">Không tái khám</span>
+                                </label>
+                            </div>
+
+                            <div class="form-check me-5">
+                                <input class="form-check-input" disabled type="radio" name="reExamination" id="inactive"
+                                       value="true" ${appointment.reExamination==true?'checked': ''}>
+                                <label class="form-check-label" for="inactive">
+                                    <span class="badge bg-success">Hẹn tái khám</span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <c:if test="${not empty appointment.doctorNote}">
                         <div class="form-group mb-3">
                             <label class="form-label" for="doctorNote">Ghi chú của bác sĩ</label>
@@ -219,8 +240,14 @@
                                         data-bs-target="#cancelModal">Hủy lịch hẹn
                                 </button>
                             </c:if>
+
+                            <c:if test="${appointment.reExamination==true}">
+                                <a href="${pageContext.request.contextPath}/patient/create-appointment" class="btn-success btn">Đặt lịch tái khám</a>
+                            </c:if>
+
                             <a href="${pageContext.request.contextPath}/patient/appointments"
                                class="btn-outline-danger btn d-inline-block me-2">Trở lại</a>
+
                         </div>
                     </div>
 

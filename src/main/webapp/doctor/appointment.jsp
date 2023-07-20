@@ -102,6 +102,27 @@
                               class="form-control">${appointment.patientNote}</textarea>
                 </div>
 
+                <div class="form-group required mb-3">
+                    <div class="d-flex">
+                        <div class="form-check me-4">
+                            <input class="form-check-input" type="radio" name="reExamination" id="active"
+                                   value="false" ${appointment.status!='CREATED' ? 'disabled': ''} ${appointment.reExamination==false?'checked': ''}>
+                            <label class="form-check-label" for="active">
+                                <span class="badge bg-danger">Không tái khám</span>
+                            </label>
+                        </div>
+
+                        <div class="form-check me-5">
+                            <input class="form-check-input" ${appointment.status!='CREATED' ? 'disabled': ''} type="radio" name="reExamination" id="inactive"
+                                   value="true" ${appointment.reExamination==true?'checked': ''}>
+                            <label class="form-check-label" for="inactive">
+                                <span class="badge bg-success">Hẹn tái khám</span>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
                 <div class="form-group mb-3">
                     <label class="form-label" for="doctorNote">Ghi chú của bác sĩ</label>
                     <textarea name="doctorNote" id="doctorNote" type="text"

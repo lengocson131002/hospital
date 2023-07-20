@@ -6,3 +6,18 @@
 .container {
     min-height: 90vh;
 }
+
+.message-icon {
+    position: fixed;
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    bottom: 50px;
+    right: 50px;
+    transition: 0.2s;
+}
+
+.message-icon:hover {
+    transform: scale(1.1);
+
+}

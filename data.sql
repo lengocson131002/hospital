@@ -71,32 +71,34 @@ create table dbo.Shift
 
 create table dbo.Appointment
 (
-    Id           int identity
+    Id             int identity
         constraint Appointment_pk
         primary key,
-    BookerId     int         not null
+    BookerId       int         not null
         constraint Booking_User_Id_booker
             references dbo.Account,
-    DoctorId     int         not null
+    DoctorId       int         not null
         constraint Booking_User_Id_doctor
             references dbo.Account,
-    ShiftId      int         not null
+    ShiftId        int         not null
         constraint Appointment_Shift_Id_fk
             references dbo.Shift
             on delete cascade,
-    PatientName  nvarchar(255),
-    PatientPhone nvarchar(255),
-    Status       varchar(50) not null,
-    PatientEmail nvarchar(255),
-    PatientNote  nvarchar(1000),
-    DoctorNote   nvarchar(1000),
-    CreatedAt    datetime,
-    UpdatedAt    datetime,
-    CanceledAt   datetime,
-    FinishedAt   datetime,
-    BillId       int
+    PatientName    nvarchar(255),
+    PatientPhone   nvarchar(255),
+    Status         varchar(50) not null,
+    PatientEmail   nvarchar(255),
+    PatientNote    nvarchar(1000),
+    DoctorNote     nvarchar(1000),
+    CreatedAt      datetime,
+    UpdatedAt      datetime,
+    CanceledAt     datetime,
+    FinishedAt     datetime,
+    BillId         int
         constraint Appointment_Bill_Id_fk
-            references dbo.Bill
+            references dbo.Bill,
+    DoctorCanceled bit,
+    ReExamination  bit
 )
     go
 

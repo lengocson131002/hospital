@@ -67,7 +67,9 @@ public class AppointmentDao {
                 "    PatientNote = ?, " +
                 "    DoctorNote = ?, " +
                 "    UpdatedAt = ?, " +
-                "    BillId = ? " +
+                "    BillId = ?," +
+                "    DoctorCanceled= ?," +
+                "    ReExamination=? " +
                 "where Id = ?";
         Connection connection = null;
         try {
@@ -89,7 +91,9 @@ public class AppointmentDao {
                 statement.setNull(11, Types.INTEGER);
             }
 
-            statement.setInt(12, appointment.getId());
+            statement.setBoolean(12, appointment.getDoctorCanceled());
+            statement.setBoolean(13, appointment.getReExamination());
+            statement.setInt(14, appointment.getId());
 
 
             if (statement.executeUpdate() > 0) {
@@ -116,7 +120,7 @@ public class AppointmentDao {
         List<Appointment> appointments = new ArrayList<>();
         Connection connection = null;
         String sql =
-                "select  a.Id, a.DoctorId, a.BookerId, a.BillId, a.Status, a.PatientName, a.PatientPhone, a.PatientEmail, a.PatientNote, a.DoctorNote, a.CreatedAt, a.UpdatedAt, s.Id as ShiftId, s.Date, s.Slot " +
+                "select  a.Id, a.DoctorId, a.BookerId, a.BillId, a.Status, a.PatientName, a.PatientPhone, a.PatientEmail, a.PatientNote, a.DoctorNote, a.CreatedAt, a.UpdatedAt, a.DoctorCanceled, a.ReExamination, s.Id as ShiftId, s.Date, s.Slot " +
                         "from Appointment a " +
                         "left join Shift s on s.Id = a.ShiftId " +
                         "where (? is null or a.Id = ?) " +
@@ -211,7 +215,8 @@ public class AppointmentDao {
                 appointment.setUpdatedAt(resultSet.getTimestamp("UpdatedAt") != null
                         ? resultSet.getTimestamp("UpdatedAt").toLocalDateTime()
                         : null);
-
+                appointment.setDoctorCanceled(resultSet.getBoolean("DoctorCanceled"));
+                appointment.setReExamination(resultSet.getBoolean("ReExamination"));
                 Shift shift = new Shift();
                 shift.setId(resultSet.getInt("ShiftId"));
                 shift.setDate(resultSet.getDate("Date").toLocalDate());

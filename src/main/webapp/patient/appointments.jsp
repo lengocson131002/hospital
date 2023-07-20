@@ -62,7 +62,8 @@
             </div>
             <button type="submit" class="btn btn-outline-primary">Lọc</button>
         </form>
-        <a class="btn btn-outline-primary d-inline-block mt-auto" href="${pageContext.request.contextPath}/patient/create-appointment"> Đặt
+        <a class="btn btn-outline-primary d-inline-block mt-auto"
+           href="${pageContext.request.contextPath}/patient/create-appointment"> Đặt
             lịch hẹn</a>
     </div>
     <div>
@@ -79,15 +80,12 @@
                 <th scope="col">Email</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Trạng thái</th>
+                <th scope="col">Tái khám</th>
                 <th scope="col">Chi tiết</th>
             </tr>
             </thead>
             <tbody>
-            <c:if test="${empty appointments}">
-                <tr>
-                    <p class="text-center my-5">Bạn chưa có lịch hẹn nào</p>
-                </tr>
-            </c:if>
+
             <c:forEach items="${appointments}" var="appointment" varStatus="loop">
                 <%
                     Appointment appointment = (Appointment) pageContext.getAttribute("appointment");
@@ -126,6 +124,14 @@
                             <span class="badge bg-danger">Đã hủy</span>
                         </c:if>
                     </td>
+                    <td>
+                        <c:if test="${appointment.reExamination==true}">
+                            <span class="badge bg-success">Hẹn tái khám</span>
+                        </c:if>
+                        <c:if test="${appointment.reExamination==false}">
+                            <span class="badge bg-danger">Không tái khám</span>
+                        </c:if>
+                    </td>
                     <td class="text-center">
                         <a href="${pageContext.request.contextPath}/patient/appointment?id=${appointment.id}">
                             <ion-icon name="eye-outline"></ion-icon>
@@ -135,6 +141,9 @@
             </c:forEach>
             </tbody>
         </table>
+        <c:if test="${empty appointments}">
+            <p class="text-center my-5">Bạn chưa có lịch hẹn nào</p>
+        </c:if>
     </div>
 </div>
 

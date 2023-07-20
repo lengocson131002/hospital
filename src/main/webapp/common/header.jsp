@@ -4,7 +4,7 @@
     <div id="navbar_top">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Medical</a>
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Medical FuDa</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@
                 <div class="">
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                             ${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<%--                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>--%>
                     </div>
                     <c:remove var="message" scope="session" />
                 </div>
@@ -100,11 +100,16 @@
                 <div class="">
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             ${error}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<%--                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>--%>
                     </div>
                     <c:remove var="error" scope="session" />
                 </div>
             </c:if>
         </div>
     </div>
+</div>
+<div>
+    <a target="_blank" href="https://www.facebook.com/profile.php?id=100094134664208" class="message-icon">
+        <img class="img-fluid" src="${pageContext.request.contextPath}/resources/images/messenger.png" />
+    </a>
 </div>

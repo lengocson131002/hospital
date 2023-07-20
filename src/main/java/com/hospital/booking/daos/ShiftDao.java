@@ -29,7 +29,8 @@ public class ShiftDao {
                         "acc.Avatar as DoctorAvatar, " +
                         "acc.FirstName as DoctorFirstName, " +
                         "acc.LastName as DoctorLastName, " +
-                        "IIF(SUM(IIF(a.Status IS NULL or a.Status = 'CANCELED', 0, 1)) > 0, 0, 1) AS IsAvailable " +
+                        "acc.IsActive as DoctorStatus, " +
+                        "IIF(SUM(IIF(a.Status IS NULL or (a.Status = 'CANCELED'  and a.DoctorCanceled != 1), 0, 1)) > 0, 0, 1) AS IsAvailable " +
                 "from Shift s " +
                 "left join Account acc on acc.Id = s.DoctorId " +
                 "left join Appointment a on s.Id = a.ShiftId " +
@@ -47,10 +48,11 @@ public class ShiftDao {
                         "s.UpdatedAt, " +
                         "acc.Avatar," +
                         "acc.FirstName, " +
-                        "acc.LastName " +
+                        "acc.LastName, " +
+                        "acc.IsActive " +
                 "having ? is null " +
-                        "or (? = 0 and IIF(SUM(IIF(a.Status IS NULL or a.Status = 'CANCELED', 0, 1)) > 0, 0, 1) = 0) " +
-                        "or (? = 1 and IIF(SUM(IIF(a.Status IS NULL or a.Status = 'CANCELED', 0, 1)) > 0, 0, 1) = 1)";
+                        "or (? = 0 and IIF(SUM(IIF(a.Status IS NULL or (a.Status = 'CANCELED'  and a.DoctorCanceled != 1), 0, 1)) > 0, 0, 1) = 0) " +
+                        "or (? = 1 and IIF(SUM(IIF(a.Status IS NULL or (a.Status = 'CANCELED'  and a.DoctorCanceled != 1), 0, 1)) > 0, 0, 1) = 1)";
 
         try {
             connection = DatabaseConnection.getInstance().getConnection();
@@ -114,6 +116,7 @@ public class ShiftDao {
                 doctor.setAvatar(resultSet.getString("DoctorAvatar"));
                 doctor.setFirstName(resultSet.getString("DoctorFirstName"));
                 doctor.setLastName(resultSet.getString("DoctorLastName"));
+                doctor.setActive(resultSet.getBoolean("DoctorStatus"));
 
                 shift.setDoctor(doctor);
 

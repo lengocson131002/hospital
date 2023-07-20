@@ -85,11 +85,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:if test="${empty appointments}">
-                <tr>
-                    <p class="text-center my-5">Bạn chưa có lịch hẹn nào</p>
-                </tr>
-            </c:if>
+
             <c:forEach items="${appointments}" var="appointment" varStatus="loop">
                 <%
                     Appointment appointment = (Appointment) pageContext.getAttribute("appointment");
@@ -136,6 +132,9 @@
             </c:forEach>
             </tbody>
         </table>
+        <c:if test="${empty appointments}">
+            <p class="text-center my-5">Bạn chưa có lịch hẹn nào</p>
+        </c:if>
     </div>
 </div>
 

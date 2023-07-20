@@ -20,7 +20,7 @@
 <jsp:include page="../common/header.jsp"/>
 <div class="container my-5">
     <div class="row">
-        <div class="col-7">
+        <div class="col-md-6">
             <div class="my-5">
                 <div>
                     <h3>Đánh giá bệnh viện từ bệnh nhân (${reviews.size()})</h3>
@@ -63,7 +63,7 @@
                 </c:forEach>
             </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
             <div class="px-3">
                 <div class="my-5">
                     <h3>Top 5 bác sĩ</h3>
@@ -77,6 +77,7 @@
                             <th scope="col">Tên</th>
                             <th scope="col">Phòng ban</th>
                             <th scope="col">Số lần khám</th>
+                            <th scope="col">Đánh giá</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -99,12 +100,23 @@
                                     <a class="text-decoration-none" href="${pageContext.request.contextPath}/admin/doctor?id=${doctor.id}">
                                             ${doctor.lastName} ${doctor.firstName}
                                     </a>
+                                    <c:if test="${doctor.active==true}">
+                                        <span class="badge bg-success">Đang hoạt động</span>
+                                    </c:if>
+                                    <c:if test="${doctor.active==false}">
+                                        <span class="badge bg-danger">Ngừng hoạt động</span>
+                                    </c:if>
                                 </td>
                                 <td>
                                         ${doctor.department.name}
                                 </td>
                                 <td>
                                     ${doctor.appointmentCount}
+                                </td>
+                                <td>
+                                    <span class="d-block me-1">${doctor.score}</span>
+                                    <span class="d-block" style="color: #ffd43b"><ion-icon
+                                            name="star"></ion-icon></span>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -114,7 +126,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <%--footer--%>

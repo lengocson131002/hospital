@@ -1,6 +1,9 @@
 package com.hospital.booking.controllers.patient;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.hospital.booking.adapters.LocalDateTimeTypeAdapter;
+import com.hospital.booking.adapters.LocalDateTypeAdapter;
 import com.hospital.booking.daos.ShiftDao;
 import com.hospital.booking.database.ShiftQuery;
 import com.hospital.booking.models.Shift;
@@ -15,9 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/patient/filter-shifts")
 public class FilterShipsController extends HttpServlet {
@@ -36,17 +41,27 @@ public class FilterShipsController extends HttpServlet {
             query.setDoctorId(doctorId);
 
             ShiftDao shiftDao = new ShiftDao();
-            shifts = shiftDao.getAll(query);
+            shifts = shiftDao
+                    .getAll(query)
+                    .stream()
+                    .filter(shift -> shift.getDoctor() != null && shift.getDoctor().isActive())
+                    .sorted(Comparator.comparingInt(Shift::getSlot))
+                    .collect(Collectors.toList());
+
             for (Shift shift : shifts) {
                 shift.setSlotInfo(SlotUtils.getSlot(shift.getSlot()));
             }
-            shifts.sort(Comparator.comparingInt(Shift::getSlot));
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        String jsonResult = new Gson().toJson(shifts);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
+
+        String jsonResult = gson.toJson(shifts);
         PrintWriter out = resp.getWriter();
         out.println(jsonResult);
         out.flush();

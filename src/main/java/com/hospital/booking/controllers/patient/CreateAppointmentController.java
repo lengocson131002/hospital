@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @WebServlet("/patient/create-appointment")
 public class CreateAppointmentController extends HttpServlet {
@@ -45,8 +46,12 @@ public class CreateAppointmentController extends HttpServlet {
 
         if (date != null) {
             ShiftDao shiftDao = new ShiftDao();
-            List<Shift> shifts = shiftDao.getAll(date, true);
-            shifts.sort((s1, s2) -> s1.getSlot() - s2.getSlot());
+            List<Shift> shifts = shiftDao.getAll(date, true)
+                    .stream()
+                    .filter(shift -> shift.getDoctor() != null && shift.getDoctor().isActive())
+                    .sorted(Comparator.comparingInt(Shift::getSlot))
+                    .collect(Collectors.toList());
+
             req.setAttribute("shifts", shifts);
         }
 

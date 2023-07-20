@@ -5,7 +5,7 @@ import com.hospital.booking.enums.Role;
 
 import java.time.LocalDate;
 
-public class Account extends BaseModel implements Cloneable{
+public class Account extends BaseModel implements Cloneable {
     private int id;
     private String firstName;
     private String lastName;

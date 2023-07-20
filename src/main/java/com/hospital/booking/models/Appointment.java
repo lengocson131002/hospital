@@ -10,7 +10,7 @@ public class Appointment extends BaseModel {
     private Account doctor;
     private Shift shift;
     private Bill bill;
-    private AppointmentStatus status = AppointmentStatus.CREATED;
+    private AppointmentStatus status;
     private String patientName;
     private String patientPhoneNumber;
     private String patientEmail;
@@ -19,8 +19,15 @@ public class Appointment extends BaseModel {
     private LocalDateTime canceledAt;
     private LocalDateTime finishedAt;
 
+    private Boolean doctorCanceled;
+
+    private Boolean reExamination;
+
     public Appointment() {
         super();
+        doctorCanceled = false;
+        status = AppointmentStatus.CREATED;
+        reExamination = false;
     }
 
     public Appointment(int id, Account booker, Account doctor, Shift shift, Bill bill, AppointmentStatus status, String patientName, String patientPhoneNumber, String patientEmail, String patientNote, String doctorNote, LocalDateTime canceledAt, LocalDateTime finishedAt) {
@@ -142,6 +149,22 @@ public class Appointment extends BaseModel {
 
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public Boolean getDoctorCanceled() {
+        return doctorCanceled;
+    }
+
+    public void setDoctorCanceled(Boolean doctorCanceled) {
+        this.doctorCanceled = doctorCanceled;
+    }
+
+    public Boolean getReExamination() {
+        return reExamination;
+    }
+
+    public void setReExamination(Boolean reExamination) {
+        this.reExamination = reExamination;
     }
 
     @Override

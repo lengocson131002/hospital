@@ -62,6 +62,8 @@ public class CancelAppointmentController extends HttpServlet {
         }
 
         appointment.setStatus(AppointmentStatus.CANCELED);
+        appointment.setDoctorCanceled(false);
+
         if (!appointmentDao.update(appointment)) {
             req.setAttribute("error", "Huỷ lịch hẹn thất bại. Vui lòng thử lại!");
         } else {

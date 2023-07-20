@@ -48,7 +48,11 @@ public class CompleteAppointmentController extends HttpServlet {
         int billId = billDao.insert(bill);
 
         bill.setId(billId);
+
+        // check re-Examination
+        boolean reEx = Boolean.parseBoolean(req.getParameter("reExamination"));
         appointment.setDoctorNote(req.getParameter("doctorNote"));
+        appointment.setReExamination(reEx);
         appointment.setStatus(AppointmentStatus.FINISHED);
         appointment.setBill(bill);
 

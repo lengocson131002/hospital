@@ -186,10 +186,10 @@
                             '       <input' + (booked ? 'disabled' : '') + ' required type="radio" name="shiftId" value="' + shift.id + '"/>' +
                             '   </td>' +
                             '   <td>' + shift.doctor?.lastName + ' ' + shift.doctor?.firstName + '</td>' +
-                            '   <td>' + shift.date.day + '/' + shift.date.month + '/' + shift.date.year + '</td>' +
+                            '   <td>' + shift.date + '</td>' +
                             '   <td>' + shift.slot + '</td>' +
                             '   <td>' + shift.slotInfo?.startTime + '-' + shift.slotInfo?.endTime + '</td>' +
-                            '   <td>' + (booked ? '<span class="badge bg-danger">Đã đặt</span>' : '<span class="badge bg-success">Chưa đặt</span>') + '</td>' +
+                            '   <td>' + (booked ? '<span class="badge bg-danger">Bận</span>' : '<span class="badge bg-success">Trống</span>') + '</td>' +
                             '</tr>')
                     })
                 },

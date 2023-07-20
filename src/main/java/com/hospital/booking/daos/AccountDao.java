@@ -19,15 +19,6 @@ import java.util.logging.Logger;
 public class AccountDao {
     private final String querySql = "select a.* from Account a";
 
-    public static void main(String[] args) {
-        AccountDao dao = new AccountDao();
-        List<Account> tops = dao.getTopDoctors(5, true);
-        System.out.println("Size: "+ tops.size());
-        for (Account acc : tops) {
-            System.out.println(acc);
-        }
-    }
-
     public List<Account> getAll(AccountQuery query) {
         String sql = "select a.*, d.Id as DepartmentId, d.Name as DepartmentName, d.Description as DepartmentDescription " +
                 "from Account a " +
@@ -306,10 +297,12 @@ public class AccountDao {
                 "   d.Id as DepartmentId, " +
                 "   d.Name as DepartmentName, " +
                 "   d.Description as DepartmentDescription, " +
-                "   COUNT(ap.id) as AppointmentCount " +
+                "   COUNT(DISTINCT ap.id) as AppointmentCount, " +
+                "   AVG(Cast(rv.Score as Float)) as Score " +
                 "from Account a " +
                 "   left join Department d on d.Id = a.DepartmentId " +
                 "   left join Appointment ap on ap.DoctorId = a.Id " +
+                "   left join Review rv on rv.DoctorId = a.Id " +
                 "where a.Role = 'DOCTOR' and (? is null or ? = 0 or (? = 1 and ap.id is not null and ap.status = 'COMPLETED')) " +
                 "group by a.Id, " +
                 "   a.Avatar, " +
@@ -351,7 +344,6 @@ public class AccountDao {
                 account.setPhoneNumber(resultSet.getString("PhoneNumber"));
                 account.setEmail(resultSet.getString("Email"));
 
-
                 int departmentId = resultSet.getInt("DepartmentId");
                 if (departmentId != 0) {
                     Department department = new Department();
@@ -362,6 +354,7 @@ public class AccountDao {
                     account.setDepartment(department);
                 }
                 account.setAppointmentCount(resultSet.getInt("AppointmentCount"));
+                account.setScore(resultSet.getFloat("Score"));
                 accounts.add(account);
             }
 
@@ -378,6 +371,14 @@ public class AccountDao {
         }
 
         return accounts;
+    }
+
+    public static void main(String[] args) {
+        AccountDao accountDao = new AccountDao();
+        List<Account> tops = accountDao.getTopDoctors(5);
+        for (Account account: tops) {
+            System.out.println(account);
+        }
     }
 
 }
