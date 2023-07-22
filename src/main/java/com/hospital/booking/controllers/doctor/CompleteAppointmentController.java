@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +27,7 @@ public class CompleteAppointmentController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
         int id = Integer.parseInt(req.getParameter("id"));
 
         AppointmentDao appointmentDao = new AppointmentDao();
@@ -36,6 +38,19 @@ public class CompleteAppointmentController extends HttpServlet {
             req.getRequestDispatcher("/doctor/appointments.jsp").forward(req, resp);
             return;
         }
+
+        // check time
+//        Shift shift = appointment.getShift();
+//        Slot slot = SlotUtils.getSlot(shift.getSlot());
+//        LocalDateTime startTime = shift.getDate().atStartOfDay()
+//                .plusHours(slot.getStartTimeCalendar().get(Calendar.HOUR_OF_DAY))
+//                .plusMinutes(slot.getStartTimeCalendar().get(Calendar.MINUTE));
+//
+//        if (startTime.isAfter(LocalDateTime.now())) {
+//            session.setAttribute("error", String.format("Hoàn thành lịch hẹn thất bại. Bạn chỉ có thể hoàn thành khi cuộc hẹn đã diễn ra."));
+//            resp.sendRedirect( req.getContextPath() + "/doctor/appointment?id=" + id);
+//            return;
+//        }
 
         // Create bill
         Bill bill = new Bill();
