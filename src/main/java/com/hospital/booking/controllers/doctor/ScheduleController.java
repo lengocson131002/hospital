@@ -54,7 +54,7 @@ public class ScheduleController extends HttpServlet {
         }
 
         SortedSet<LocalDate> keys = new TreeSet<>(days.keySet());
-        HashMap<LocalDate, List<Slot>> sortedDays = new HashMap<>();
+        HashMap<LocalDate, List<Slot>> sortedDays = new LinkedHashMap<>();
         for (LocalDate key: keys) {
             sortedDays.put(key, days.get(key));
         }

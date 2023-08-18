@@ -78,8 +78,6 @@ public class CompleteAppointmentController extends HttpServlet {
             return;
         }
 
-
-
         resp.sendRedirect(req.getContextPath() + "/doctor/appointments");
     }
 

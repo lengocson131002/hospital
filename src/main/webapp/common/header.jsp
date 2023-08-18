@@ -4,7 +4,7 @@
     <div id="navbar_top">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Medical FuDa</a>
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Medical SWP</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -107,9 +107,4 @@
             </c:if>
         </div>
     </div>
-</div>
-<div>
-    <a target="_blank" href="https://www.facebook.com/profile.php?id=100094134664208" class="message-icon">
-        <img class="img-fluid" src="${pageContext.request.contextPath}/resources/images/messenger.png" />
-    </a>
 </div>
